@@ -22,14 +22,14 @@ const updateProduct = asyncHandler(async (req, res) => {
       $set: req.body,
     },
     { new: true },
-  );
-
+  )
   if (!updatedProduct) {
     res.status(400);
     throw new Error("Product has not been updated");
   } else {
     res.status(201).json(updatedProduct);
-  }
+  }});
+
 
   //DELETE PRODUCT
   const deleteProduct = asyncHandler(async (req, res) => {
@@ -74,30 +74,37 @@ const updateProduct = asyncHandler(async (req, res) => {
       });
     } else {
       products = await Product.find().sort({ createdAt: -1 });
+      res.status(200).json(products);
     }
   });
 
-//RATING PRODUCT
-const ratingProduct = asyncHandler(async(req, res) => {
-    const {star, name, comment, postedBy} = req.body;
-    if(star && name && comment && postedBy) {
-        const postedBy = await Product.findByIdAndUpdate(req.params.id,
-            {
-                $push: {ratings:{star, name, comment, postedBy}}
-            },
-            {
-                $new: true,
-            }
-        );
-    
-        res.status(201).json("Product was rated successfully");
-    } else{
-        res.status(400);
-        throw new Error("Product was not rated");
+  //RATING PRODUCT
+  const ratingProduct = asyncHandler(async (req, res) => {
+    const { star, name, comment, postedBy } = req.body;
+    if (star && name && comment && postedBy) {
+      const postedBy = await Product.findByIdAndUpdate(
+        req.params.id,
+        {
+          $push: { ratings: { star, name, comment, postedBy } },
+        },
+        {
+          $new: true,
+        },
+      );
 
+      res.status(201).json("Product was rated successfully");
+    } else {
+      res.status(400);
+      throw new Error("Product was not rated");
     }
-});
-});
+  });
 
-export{ratingProduct, getALLProducts, getProduct, createProduct, updateProduct, deleteProduct};
 
+export {
+  ratingProduct,
+  getALLProducts,
+  getProduct,
+  createProduct,
+  updateProduct,
+  deleteProduct,
+};
