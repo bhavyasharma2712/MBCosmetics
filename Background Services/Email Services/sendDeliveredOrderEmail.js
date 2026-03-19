@@ -4,7 +4,7 @@ import sendMail from "../helpers/sendMail.js";
 import Order from "../models/order.model.js";
 dotenv.config();
 
-const sendPendingOrderEmail = async () => {
+const sendDeliveredOrderEmail = async () => {
   const orders = await Order.find({ status: 2 });
   if (orders.length) {
     for (let order of orders) {

@@ -8,7 +8,7 @@ dotenv.config();
 const sendPromotionEmail = async () => {
   const users = await User.find();
   const products = await Product.aggregate([{ $sample: { size: 5 } }]);
-};
+
 for (let user of users) {
   ejs.renderFile(
     "templates/promotion.ejs",
@@ -29,6 +29,6 @@ for (let user of users) {
       }
     },
   );
-}
+}};
 
-export default sendPromotionEmail();
+export default sendPromotionEmail;

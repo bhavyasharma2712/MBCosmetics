@@ -4,8 +4,8 @@ import cron from "node-cron";
 import dbConnection from "./utils/db.js";
 import sendWelcomeEmail from "./Email Services/sendWelcomeEmail.js";
 import sendpendingOrderEmail from "./Email Services/sendPendingOrderEmail.js";
-import sendDeliveredOrderEmail from "./Email Services/sendDeliveredOrderEmail.js";
 import sendPromotionEmail from "./Email Services/sendPromotionEmail.js";
+import sendDeliveredOrderEmail from "./Email Services/sendDeliveredOrderEmail.js";
 dotenv.config();
 
 const app = express();
