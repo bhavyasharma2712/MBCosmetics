@@ -2,9 +2,9 @@ import {Typewriter} from "react-simple-typewriter";
 
 const Announcement = () => {
     return (
-        <div style={{ backgroundColor: '#e9acd9', textAlign: 'center' }} classname ="flex text-white text-[18px] font-semibold h-[30px] ">
+        <div style={{ backgroundColor: '#90EE90', textAlign: 'center' }} classname ="flex text-white text-[18px] font-semibold h-[30px] ">
             <Typewriter
-            words = {["Eat", "Sleep", "Code", "Repeat!"]}
+            words = {["🌿 Free Shipping on orders above ₹499", "Use Code MBFRESH for 10% off" , "New Arrivals: Men's Face Wash Collection", "100% Natural Ingredients"]}
             loop = {5}
             cursor
             cursorStyle = '_'
