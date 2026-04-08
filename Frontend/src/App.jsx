@@ -5,6 +5,7 @@ import Myaccount from "./pages/Myaccount";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Announcement from "./components/Announcement";
+import Product from "./pages/Product";
 
 const Layout = () => {
   return (
@@ -25,6 +26,7 @@ const router = createBrowserRouter([
       { path: "/", element: <Home /> },
       { path: "/cart", element: <Cart /> },
       { path: "/myaccount", element: <Myaccount /> },
+      { path: "/product/:productId", element: <Product /> },
     ],
   },
 ]);

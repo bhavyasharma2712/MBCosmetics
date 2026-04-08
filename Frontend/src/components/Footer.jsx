@@ -38,12 +38,12 @@ const Footer = () => {
         <div className="w-full md:w-1/3">
           <h2 className="text-xl font-semibold ">Contact Us</h2>
           <p className="mt-2 ">123 MBCosmetics Avenue, City, Country</p>
-          <p className="mt-2 ">Phone: (+91)8889997776</p>
+          <p className="mt-2 ">Phone: (+91) 8889997776</p>
           <p className="mt-2 ">Email: mbcosmetics2712@gmail.com</p>
         </div>
       </div>
       <div className="mt-8 border-t border-[#8FE388] pt-4 text-center  ">
-        <div className="border-t border-gray-200 py-5 flex flex-col items-center gap-3">
+        <div className="py-5 flex flex-col items-center gap-3">
           <p className="text-sm text-gray-500">
             © 2026 MB Cosmetics. All rights reserved.
           </p>
