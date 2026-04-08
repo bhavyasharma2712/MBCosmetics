@@ -1,12 +1,12 @@
-import StarRatings from "react-star-rating-component";
 import Product from "./Product";
+
 const Products = () => {
   return (
     <div className="flex flex-wrap m-[30px]">
-      <Product />
-      <Product />
-      <Product />
-      <Product />
+      <Product img="/facewashmen.png" />
+      <Product img="/toner.jpg" />
+      <Product img="/womentoner.png" />
+      <Product img="/foundation.jpg" />
     </div>
   );
 };
