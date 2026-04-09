@@ -1,4 +1,4 @@
-import {Link}  from "react-router-dom";
+import { Link } from "react-router-dom";
 const Login = () => {
   return (
     <div className="flex items-center justify-center mt-[2%]">
@@ -14,7 +14,9 @@ const Login = () => {
 
         {/* FORM */}
         <div className="p-10 w-[500px]">
-          <h2 className="text-xl font-semibold text-gray-700 mb-5">Create Account</h2>
+          <h2 className="text-xl font-semibold text-gray-700 mb-5">
+            Create Account
+          </h2>
           <form className="spay-y-5">
             <div>
               <label htmlFor="" className="block text-gray-600 mb-1">
@@ -51,8 +53,10 @@ const Login = () => {
             </button>
 
             <div className="mt-4 text-sm text-gray-600 font-semibold ">
-              <span>Already have an account?  </span>
-              <Link to="/login" className="text-green-700 hover:underline">Sign In</Link>
+              <span>Already have an account? </span>
+              <Link to="/login" className="text-green-700 hover:underline">
+                Sign In
+              </Link>
             </div>
           </form>
         </div>
