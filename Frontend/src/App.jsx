@@ -8,6 +8,8 @@ import Announcement from "./components/Announcement";
 import Product from "./pages/Product";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import ProductList from "./pages/ProductList";
+import Order from "./pages/Order";
 
 const Layout = () => {
   return (
@@ -31,6 +33,8 @@ const router = createBrowserRouter([
       { path: "/create-account", element: <Register /> },
       { path: "/myaccount", element: <Myaccount /> },
       { path: "/product/:productId", element: <Product /> },
+      { path: "/products/:searchterm", element: <ProductList /> },
+      { path: "/myorders", element: <Order /> },
     ],
   },
 ]);
