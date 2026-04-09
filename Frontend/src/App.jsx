@@ -6,6 +6,8 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Announcement from "./components/Announcement";
 import Product from "./pages/Product";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 
 const Layout = () => {
   return (
@@ -25,6 +27,8 @@ const router = createBrowserRouter([
     children: [
       { path: "/", element: <Home /> },
       { path: "/cart", element: <Cart /> },
+      { path: "/login", element: <Login /> },
+      { path: "/create-account", element: <Register /> },
       { path: "/myaccount", element: <Myaccount /> },
       { path: "/product/:productId", element: <Product /> },
     ],
