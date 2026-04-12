@@ -2,7 +2,9 @@ import Home from "./pages/Home";
 import Menu from "./components/Menu";
 import Products from "./pages/Products";
 import Users from "./pages/Users";
+import Orders from "./pages/Orders";
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
+import Banners from "./pages/Banners";
 
 function App () { 
       const Layout = () =>{
@@ -36,9 +38,22 @@ const router = createBrowserRouter([
         path:"/products",
         element:<Products />
       },
-    ]
-  }
-])
+      {
+        path:"/products",
+        element:<Products />
+      },
+      {
+        path:"/orders",
+        element:<Orders />
+      },
+      {
+        path:"/banners",
+        element:<Banners />
+      },
+    ]}
+  ]
+);
+
 
 return (
   <div>
