@@ -52,7 +52,7 @@ const Banners = () => {
       <div className="flex flex-col ">
         <div className="flex-1 bg-white p-5">
           <div className="flex flex-col">
-            <label htmlFor="" className="font-semibold">Image:</label>
+            <span htmlFor="" className="font-semibold">Image:</span>
             <div className="border-2 h-[100px] w-[100px] border-[#444] border-solid rounded-md">
 
               <div className="flex items-center justify-center mt-[40px]">

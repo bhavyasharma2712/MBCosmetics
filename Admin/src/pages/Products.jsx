@@ -1,8 +1,10 @@
 import { DataGrid } from "@mui/x-data-grid";
 import { FaTrash } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Products = () => {
+  const navigate = useNavigate();
+
   const data = [
     {
       _id: "101",
@@ -119,7 +121,10 @@ const Products = () => {
     <div className="p-5 w-[70vw]">
       <div className="flex items-center justify-between m-[30px]">
         <h1 className="m-[20px] text-[20px]">All Products</h1>
-        <button className="bg-[#1e1e1e] p-[10px] font-semibold text-white cursor-pointer">
+        <button
+          onClick={() => navigate("/newproduct")}
+          className="bg-[#1e1e1e] p-[10px] font-semibold text-white cursor-pointer"
+        >
           Create
         </button>
       </div>

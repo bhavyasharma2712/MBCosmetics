@@ -5,6 +5,8 @@ import Users from "./pages/Users";
 import Orders from "./pages/Orders";
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
 import Banners from "./pages/Banners";
+import NewProduct from "./pages/NewProduct";
+import Product from "./pages/Product";
 
 function App () { 
       const Layout = () =>{
@@ -49,6 +51,14 @@ const router = createBrowserRouter([
       {
         path:"/banners",
         element:<Banners />
+      },
+      {
+        path:"/newproduct",
+        element:<NewProduct />
+      },
+      {
+        path:"/product/:id",
+        element:<Product />
       },
     ]}
   ]
