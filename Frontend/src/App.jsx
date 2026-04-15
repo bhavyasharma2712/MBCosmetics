@@ -10,10 +10,12 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ProductList from "./pages/ProductList";
 import Order from "./pages/Order";
+import ScrollToTop from "./components/ScrollToTop"; 
 
 const Layout = () => {
   return (
     <div>
+      <ScrollToTop />
       <Announcement />
       <Navbar />
       <Outlet />
