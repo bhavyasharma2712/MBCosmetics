@@ -1,57 +1,28 @@
 import { DataGrid } from "@mui/x-data-grid";
 import { FaTrash } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
+import { userRequest } from "../requestMethods";
+import { useEffect, useState } from "react";
 
 const Products = () => {
   const navigate = useNavigate();
 
-  const data = [
-    {
-      _id: "101",
-      title: "Heaven Dove Toner",
-      img: "/womentoner.png",
-      desc: "Toner for Women",
-      originalPrice: 499,
-      discountedPrice: 379,
-      inStock: true,
-    },
-    {
-      _id: "102",
-      title: "Luminous Complexion Foundation",
-      img: "/foundation.jpg",
-      desc: "Brightening Foundation for skin.",
-      originalPrice: 499,
-      discountedPrice: 429,
-      inStock: false,
-    },
-    {
-      _id: "103",
-      title: "Luron Eyeliner",
-      img: "/eyeliner.png",
-      desc: "Long-lasting eyeliner for bold, precise lines.",
-      originalPrice: 399,
-      discountedPrice: 359,
-      inStock: true,
-    },
-    {
-      _id: "104",
-      title: "Dr Rashel's Salicylic Acid 2% Face Serum",
-      img: "/serum2.png",
-      desc: "Gentle Face Serum for All Skin Types",
-      originalPrice: 359,
-      discountedPrice: 319,
-      inStock: true,
-    },
-    {
-      _id: "105",
-      title: "Nivea Face Wash for Men",
-      img: "/facewashmen.png",
-      desc: "Organic Cleanser for All Skin Types",
-      originalPrice: 349,
-      discountedPrice: 317,
-      inStock: false,
-    },
-  ];
+  // state for products
+  const [products, setProducts] = useState([]);
+
+  // fetch products from API
+  useEffect(() => {
+    const getProducts = async () => {
+      try {
+        const res = await userRequest.get("/products");
+        setProducts(res.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    getProducts();
+  }, []);
 
   const columns = [
     {
@@ -113,7 +84,9 @@ const Products = () => {
       field: "delete",
       headerName: "Delete",
       width: 100,
-      renderCell: () => <FaTrash className="text-red-500 cursor-pointer m-2" />,
+      renderCell: () => (
+        <FaTrash className="text-red-500 cursor-pointer m-2" />
+      ),
     },
   ];
 
@@ -128,9 +101,10 @@ const Products = () => {
           Create
         </button>
       </div>
+
       <div className="m-[40px]">
         <DataGrid
-          rows={data}
+          rows={products}   // 👈 now using API data
           columns={columns}
           getRowId={(row) => row._id}
           checkboxSelection

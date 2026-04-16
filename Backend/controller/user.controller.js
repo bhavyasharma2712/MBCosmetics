@@ -3,7 +3,7 @@ import asyncHandler from "express-async-handler";
 import bcrypt from "bcryptjs";
 
 //UPDATE USER
-const updateUser = asyncHandler(async () => {
+const updateUser = asyncHandler(async (req, res) => {
   if (req.body.password) {
     const salt = await bcrypt.genSalt(10);
     req.body.password = await bcrypt.hash(req.body.password, salt);
@@ -22,7 +22,7 @@ const updateUser = asyncHandler(async () => {
 });
 
 //DELETE USER
-const deleteUser = asyncHandler(async () => {
+const deleteUser = asyncHandler(async (req, res) => {
   const deletedUser = await User.findByIdAndDelete(req.params.id);
   if (!deletedUser) {
     res.status(400);
@@ -33,24 +33,24 @@ const deleteUser = asyncHandler(async () => {
 });
 
 //GET ONE USER
-const getUser = asyncHandler(async () => {
-  const user = await User.findBy(req.params.id);
+const getUser = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.params.userId); // ⚠️ also fixed findBy → findById
   if (!user) {
     res.status(400);
     throw new Error("User was not found");
   } else {
-    res.status(201).json(user);
+    res.status(200).json(user);
   }
 });
 
 //GET ALL USERS
-const getAllUsers = asyncHandler(async () => {
+const getAllUsers = asyncHandler(async (req, res) => {
   const users = await User.find();
   if (!users) {
     res.status(400);
     throw new Error("Users were not fetched");
   } else {
-    res.status(201).json(users);
+    res.status(200).json(users);
   }
 });
 

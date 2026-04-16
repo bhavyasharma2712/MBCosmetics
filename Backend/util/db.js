@@ -4,18 +4,18 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const dbConnection = async () => {
-    try {
+  try {
+    await mongoose.connect(process.env.MONGO_URI, {
+      dbName: "mbcosmetics",
+    });
 
-        await mongoose.connect(process.env.MONGO_URI);
+    console.log("✅ MongoDB Connected Successfully");
+    console.log("📦 DB:", mongoose.connection.name);
 
-        console.log("✅ MongoDB Connected Successfully");
-
-    } catch (error) {
-
-        console.log("❌ MongoDB Connection Error:", error.message);
-
-        process.exit(1);
-    }
+  } catch (error) {
+    console.log("❌ MongoDB Connection Error:", error.message);
+    process.exit(1);
+  }
 };
 
-export default dbConnection;
+export default dbConnection;   // ✅ THIS WAS MISSING

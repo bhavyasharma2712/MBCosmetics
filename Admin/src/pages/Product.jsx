@@ -1,70 +1,72 @@
 import { LineChart } from "@mui/x-charts/LineChart";
 import { FaUpload } from "react-icons/fa";
 import { useParams } from "react-router-dom";
-
-const allProducts = [
-  {
-    _id: "101",
-    title: "Heaven Dove Toner",
-    img: "/womentoner.png",
-    desc: "Toner for Women",
-    originalPrice: 499,
-    discountedPrice: 379,
-    inStock: true,
-  },
-  {
-    _id: "102",
-    title: "Luminous Complexion Foundation",
-    img: "/foundation.jpg",
-    desc: "Brightening Foundation for skin.",
-    originalPrice: 499,
-    discountedPrice: 429,
-    inStock: false,
-  },
-  {
-    _id: "103",
-    title: "Luron Eyeliner",
-    img: "/eyeliner.png",
-    desc: "Long-lasting eyeliner for bold, precise lines.",
-    originalPrice: 399,
-    discountedPrice: 359,
-    inStock: true,
-  },
-  {
-    _id: "104",
-    title: "Dr Rashel's Salicylic Acid 2% Face Serum",
-    img: "/serum2.png",
-    desc: "Gentle Face Serum for All Skin Types",
-    originalPrice: 359,
-    discountedPrice: 319,
-    inStock: true,
-  },
-  {
-    _id: "105",
-    title: "Nivea Face Wash for Men",
-    img: "/facewashmen.png",
-    desc: "Organic Cleanser for All Skin Types",
-    originalPrice: 349,
-    discountedPrice: 317,
-    inStock: false,
-  },
-];
+import { useEffect, useState } from "react";
+import { userRequest } from "../requestMethods";
 
 const Product = () => {
   const { id } = useParams();
-  const product = allProducts.find((p) => p._id === id) || allProducts[0];
+
+  const [product, setProduct] = useState(null);
+  const [formData, setFormData] = useState({});
+
+  // 🔥 Fetch product
+  useEffect(() => {
+    const getProduct = async () => {
+      try {
+        const res = await userRequest.get(`/products/find/${id}`);
+        setProduct(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    getProduct();
+  }, [id]);
+
+  // 🔄 Sync product → form
+  useEffect(() => {
+    if (product) {
+      setFormData(product);
+    }
+  }, [product]);
+
+  // ✏️ Handle input change
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: name === "inStock" ? value === "yes" : value,
+    }));
+  };
+
+  // 🔥 Update product
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+
+    try {
+      await userRequest.put(`/products/${product._id}`, formData);
+      alert("Product Updated ✅");
+    } catch (err) {
+      console.log(err);
+      alert("Update failed ❌");
+    }
+  };
+
+  // ⏳ Loading
+  if (!product) {
+    return <div className="p-5">Loading...</div>;
+  }
 
   return (
     <div className="p-5 w-[70vw]">
-      {/* FIRST PART */}
+      {/* HEADER */}
       <div className="flex items-center justify-between mb-5">
         <h3 className="text-3xl font-semibold">Product</h3>
-        <button className="bg-slate-500 text-white py-2 px-4 rounded">
-          Create
-        </button>
       </div>
 
-      {/* SECOND PART */}
+      {/* TOP SECTION */}
       <div className="flex flex-col md:flex-row gap-5">
         {/* CHART */}
         <div className="w-[500px]">
@@ -73,12 +75,10 @@ const Product = () => {
             series={[{ data: [2, 5.5, 2, 8.5, 1.5, 5] }]}
             height={250}
             width={500}
-            margin={{ left: 30, right: 30, top: 30, bottom: 30 }}
-            grid={{ vertical: true, horizontal: true }}
           />
         </div>
 
-        {/* PRODUCT CARD */}
+        {/* PRODUCT INFO */}
         <div className="flex-1 bg-white p-5 shadow-lg rounded-lg">
           <div className="flex items-center gap-4 mb-5">
             <img
@@ -86,94 +86,94 @@ const Product = () => {
               alt={product.title}
               className="h-16 w-16 rounded-full object-contain"
             />
-            <span className="text-2xl font-semibold">{product.title}</span>
+            <span className="text-2xl font-semibold">
+              {product.title}
+            </span>
           </div>
 
           <div className="space-y-3">
             <div className="flex justify-between border-b pb-2">
-              <span className="font-semibold">ID:</span>
+              <span>ID:</span>
               <span>{product._id}</span>
             </div>
             <div className="flex justify-between border-b pb-2">
-              <span className="font-semibold">Price:</span>
+              <span>Price:</span>
               <span>₹{product.discountedPrice}</span>
             </div>
             <div className="flex justify-between">
-              <span className="font-semibold">In Stock:</span>
+              <span>Stock:</span>
               <span>{product.inStock ? "Yes" : "No"}</span>
             </div>
           </div>
         </div>
       </div>
 
-      {/* THIRD PART */}
+      {/* FORM */}
       <div className="mt-5 bg-white p-5 shadow-lg rounded-lg">
-        <form action="" className="flex flex-col md:flex-row gap-5">
+        <form
+          onSubmit={handleUpdate}
+          className="flex flex-col md:flex-row gap-5"
+        >
           {/* LEFT */}
           <div className="flex-1 space-y-5">
-            <div>
-              <label className="block mb-2 font-semibold">Product Name</label>
-              <input
-                type="text"
-                defaultValue={product.title}
-                className="w-full p-2 border border-gray-300 rounded"
-              />
-            </div>
+            <input
+              name="title"
+              value={formData.title || ""}
+              onChange={handleChange}
+              placeholder="Title"
+              className="w-full p-2 border"
+            />
 
-            <div>
-              <label className="block mb-2 font-semibold">Product Description</label>
-              <input
-                type="text"
-                defaultValue={product.desc}
-                className="w-full p-2 border border-gray-300 rounded"
-              />
-            </div>
+            <input
+              name="desc"
+              value={formData.desc || ""}
+              onChange={handleChange}
+              placeholder="Description"
+              className="w-full p-2 border"
+            />
 
-            <div>
-              <label className="block mb-2 font-semibold">Product Original Price</label>
-              <input
-                type="number"
-                defaultValue={product.originalPrice}
-                className="w-full p-2 border border-gray-300 rounded"
-              />
-            </div>
+            <input
+              name="originalPrice"
+              type="number"
+              value={formData.originalPrice || ""}
+              onChange={handleChange}
+              placeholder="Original Price"
+              className="w-full p-2 border"
+            />
 
-            <div>
-              <label className="block mb-2 font-semibold">Product Discounted Price</label>
-              <input
-                type="number"
-                defaultValue={product.discountedPrice}
-                className="w-full p-2 border border-gray-300 rounded"
-              />
-            </div>
+            <input
+              name="discountedPrice"
+              type="number"
+              value={formData.discountedPrice || ""}
+              onChange={handleChange}
+              placeholder="Discounted Price"
+              className="w-full p-2 border"
+            />
 
-            <div>
-              <label className="block mb-2 font-semibold">In Stock</label>
-              <select
-                defaultValue={product.inStock ? "yes" : "no"}
-                className="w-full p-2 border border-gray-300 rounded"
-              >
-                <option value="yes">Yes</option>
-                <option value="no">No</option>
-              </select>
-            </div>
+            <select
+              name="inStock"
+              value={formData.inStock ? "yes" : "no"}
+              onChange={handleChange}
+              className="w-full p-2 border"
+            >
+              <option value="yes">In Stock</option>
+              <option value="no">Out of Stock</option>
+            </select>
           </div>
 
           {/* RIGHT */}
           <div className="flex-1 flex flex-col items-center space-y-5">
-            <div className="flex flex-col items-center">
-              <img
-                src={product.img}
-                alt={product.title}
-                className="h-40 w-40 rounded-full mr-5 object-contain"
-              />
-              <label className="cursor-pointer">
-                <FaUpload className="text-2xl text-gray-700" />
-              </label>
-              <button className="bg-slate-500 text-white py-2 px-4 rounded mt-5">
-                Update
-              </button>
-            </div>
+            <img
+              src={product.img}
+              alt={product.title}
+              className="h-40 w-40 rounded-full object-contain"
+            />
+
+            <FaUpload className="text-2xl text-gray-700" />
+
+            <button className="bg-black text-white px-4 py-2">
+              Update
+            </button>
           </div>
         </form>
       </div>
