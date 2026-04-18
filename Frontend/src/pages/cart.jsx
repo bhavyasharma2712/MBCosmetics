@@ -1,99 +1,134 @@
 import { FaMinus, FaPlus, FaTrashAlt } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import { removeProduct, clearCart } from "../redux/cartRedux";
+
 const Cart = () => {
+  const dispatch = useDispatch();
+  const { products, total } = useSelector((state) => state.cart);
+  const shipping = products.length > 0 ? 70 : 0;
+
+  const handleIncrease = (product) => {
+    dispatch(
+      removeProduct({ id: product.id })
+    );
+    dispatch({
+      type: "cart/addProduct",
+      payload: { ...product, quantity: product.quantity + 1 },
+    });
+  };
+
+  const handleDecrease = (product) => {
+    if (product.quantity === 1) {
+      dispatch(removeProduct({ id: product.id }));
+    } else {
+      dispatch(removeProduct({ id: product.id }));
+      dispatch({
+        type: "cart/addProduct",
+        payload: { ...product, quantity: product.quantity - 1 },
+      });
+    }
+  };
+
   return (
     <div className="min-h-screen p-8">
       <h3 className="text-[20px] font-bold mb-6">Shopping Cart</h3>
-      <div className="flex gap-8">
-        {/* LEFT */}
-        <div className="flex-1 bg-white shadow-md rounded-lg p-6">
-          <h2 className="text-xl font-semibold mb-4">Your Items</h2>
 
-          <div className="flex flex-col space-y-4">
-            <div className="flex items-center justify-between border-b border-gray-400 pb-4">
-              <img
-                src="/facewashmen.png"
-                alt=""
-                className="w-32 h-40 rounded-md "
-              />
-              <div className="flex-1 ml-4 -mt-4">
-                <h3 className="text-xl font-semibold mb-2">
-                  AquaClear Deep Clean Face Wash (For Men)
-                </h3>
-                <p className="text-gray-600 ">
-                  A refreshing deep-cleansing face wash designed for men to
-                  remove dirt, excess oil, and impurities
-                </p>
-                <div className="flex items-center my-5 p-4">
-                  <FaMinus className="bg-[#8FE388] text-white cursor-pointer p-2 rounded-full mr-4 text-3xl" />
-                  <span className="text-lg font-semibold mx-4">1</span>
-                  <FaPlus className="bg-[#8FE388] text-white cursor-pointer p-2 rounded-full mr-4 text-3xl" />
-                </div>
-              </div>
-              <div className="text-right">
-                <p className="text-xl font-bold mb-6">₹349</p>
-                <FaTrashAlt className="text-red-600 cursor-pointer" />
-              </div>
-            </div>
-          </div>
-
-          <div className="flex flex-col space-y-4">
-            <div className="flex items-center justify-between border-b border-gray-200 pb-4">
-              <img
-                src="/foundation.jpg"
-                alt=""
-                className="w-32 h-40 rounded-md "
-              />
-              <div className="flex-1 ml-4 -mt-4">
-                <h3 className="text-xl font-semibold mb-2 mt-10">
-                  Luminous Complexion Foundation
-                </h3>
-                <p className="text-gray-600  ">
-                  Achieve flawless skin with our lightweight liquid foundation
-                  that delivers buildable coverage and a natural, seamless
-                  finish
-                </p>
-                <div className="flex items-center my-5 p-4">
-                  <FaMinus className="bg-[#8FE388] text-white cursor-pointer p-2 rounded-full mr-4 text-3xl" />
-                  <span className="text-lg font-semibold mx-4">2</span>
-                  <FaPlus className="bg-[#8FE388] text-white cursor-pointer p-2 rounded-full mr-4 text-3xl" />
-                </div>
-              </div>
-              <div className="text-right">
-                <p className="text-xl font-bold mb-6">₹499</p>
-                <FaTrashAlt className="text-red-600 cursor-pointer" />
-              </div>
-            </div>
-          </div>
-          <button className="bg-red-500 w-[200px] text-white p-3 mt-4 rounded-md font-semibold">
-            Clear Cart
-          </button>
-          <div></div>
+      {products.length === 0 ? (
+        <div className="flex flex-col items-center justify-center mt-20 text-gray-400">
+          <p className="text-2xl font-semibold">Your cart is empty</p>
+          <p className="text-sm mt-2">Add some products to get started!</p>
         </div>
-        {/* RIGHT */}
-        <div className="w-80 bg-white shadow-md rounded-lg p-6">
-          <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
-          <div className="flex flex-col space-y-4 ">
-            <div className="flex justify-between ">
-              <span className="text-lg font-medium">Subtotal</span>
-              <span className="text-lg font-medium">₹1347</span>
+      ) : (
+        <div className="flex gap-8">
+          <div className="flex-1 bg-white shadow-md rounded-lg p-6">
+            <h2 className="text-xl font-semibold mb-4">Your Items</h2>
+
+            <div className="flex flex-col space-y-4">
+              {products.map((product) => (
+                <div
+                  key={product.id}
+                  className="flex items-center justify-between border-b border-gray-200 pb-4"
+                >
+                  <img
+                    src={product.img}
+                    alt={product.name}
+                    className="w-32 h-40 rounded-md object-cover"
+                  />
+
+                  <div className="flex-1 ml-4">
+                    <h3 className="text-xl font-semibold mb-2">
+                      {product.name}
+                    </h3>
+
+                    <div className="flex items-center my-5 p-4">
+                      <FaMinus
+                        onClick={() => handleDecrease(product)}
+                        className="bg-[#8FE388] text-white cursor-pointer p-2 rounded-full mr-4 text-3xl"
+                      />
+
+                      <span className="text-lg font-semibold mx-4">
+                        {product.quantity}
+                      </span>
+
+                      <FaPlus
+                        onClick={() => handleIncrease(product)}
+                        className="bg-[#8FE388] text-white cursor-pointer p-2 rounded-full mr-4 text-3xl"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="text-right">
+                    <p className="text-xl font-bold mb-6">
+                      ₹{product.price * product.quantity}
+                    </p>
+
+                    <FaTrashAlt
+                      onClick={() =>
+                        dispatch(removeProduct({ id: product.id }))
+                      }
+                      className="text-red-600 cursor-pointer"
+                    />
+                  </div>
+                </div>
+              ))}
             </div>
 
-            <div className="flex justify-between ">
-              <span className="text-lg font-medium">Shipping</span>
-              <span className="text-lg font-medium">₹70</span>
-            </div>
-
-            <div className="flex justify-between ">
-              <span className="text-lg font-medium">Total</span>
-              <span className="text-lg font-medium">₹1417</span>
-            </div>
-
-            <button className="bg-[#1b5e15] text-white p-3 w-full rounded-lg font-semibold">
-              Proceed to Checkout
+            <button
+              onClick={() => dispatch(clearCart())}
+              className="bg-red-500 w-[200px] text-white p-3 mt-4 rounded-md font-semibold"
+            >
+              Clear Cart
             </button>
           </div>
+
+          <div className="w-80 bg-white shadow-md rounded-lg p-6">
+            <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
+
+            <div className="flex flex-col space-y-4">
+              <div className="flex justify-between">
+                <span className="text-lg font-medium">Subtotal</span>
+                <span className="text-lg font-medium">₹{total}</span>
+              </div>
+
+              <div className="flex justify-between">
+                <span className="text-lg font-medium">Shipping</span>
+                <span className="text-lg font-medium">₹{shipping}</span>
+              </div>
+
+              <div className="flex justify-between">
+                <span className="text-lg font-medium">Total</span>
+                <span className="text-lg font-medium">
+                  ₹{total + shipping}
+                </span>
+              </div>
+
+              <button className="bg-[#1b5e15] text-white p-3 w-full rounded-lg font-semibold">
+                Proceed to Checkout
+              </button>
+            </div>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

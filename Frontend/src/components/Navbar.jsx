@@ -1,46 +1,84 @@
-import { FaSearch, FaUser } from "react-icons/fa";
-import ShoppingBasketIcon from "@mui/icons-material/ShoppingBasket";
-import Badge from "@mui/material/Badge";
-import {Link} from "react-router-dom";
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { FaSearch, FaShoppingBag, FaUserCircle } from 'react-icons/fa';
 
 const Navbar = () => {
+  const [searchTerm, setSearchTerm] = useState("");
+  const navigate = useNavigate();
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchTerm.trim()) {
+      navigate(`/products/${searchTerm}`);
+    }
+  };
+
   return (
-    <div className="flex items-center justify-between h-[100px] shadow-md pl-0 pr-6 z-50 relative">
-      <Link to='/'>
-        {/* Logo */}
-      <div className="cursor-pointer m-2">
-        <img src="/logo.png" alt="" height="200px" width="200px" />
-      </div>
-      </Link>
+    <nav className="w-full bg-white/90 backdrop-blur-md border-b border-gray-100 font-sans sticky top-0 z-50">
+      <div className="max-w-[1440px] mx-auto px-4 md:px-10 py-2 flex items-center justify-between gap-10">
+        
+        {/* Logo Section - Adjusted height to prevent layout stretching */}
+        <Link to="/" className="flex-shrink-0 transition-transform hover:scale-105 active:scale-95">
+          <img 
+            src="/logo.png" 
+            alt="MB Cosmetics" 
+            className="h-14 md:h-16 w-auto object-contain" 
+          />
+        </Link>
 
-      {/* Search */}
-    <div className="flex items-center m-2 flex-1 justify-center">
-        <input
-          type="text"
-          placeholder="Search Products"
-          className="p-[15px] border-2 border-[#8FE388] border-solid w-[500px] outline-none rounded-lg"
-        />
-        <FaSearch className="text-[20px] cursor-pointer ml-2" />
-      </div>
+        {/* Search Bar */}
+        <form 
+          onSubmit={handleSearch}
+          className="hidden md:flex flex-1 max-w-xl relative items-center group"
+        >
+          <input 
+            type="text" 
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder="Search Products.." 
+            className="w-full bg-gray-50 border border-gray-200 rounded-full py-2 px-6 pr-12 
+                       text-sm text-gray-700 placeholder:text-gray-400
+                       focus:outline-none focus:ring-4 focus:ring-green-50/50 focus:border-green-600 
+                       focus:bg-white transition-all duration-300 shadow-sm"
+          />
+          <button 
+            type="submit"
+            className="absolute right-1.5 w-8 h-8 flex items-center justify-center 
+                       bg-green-600 text-white rounded-full hover:bg-green-800 transition-all"
+          >
+            <FaSearch className="text-[10px]" />
+          </button>
+        </form>
 
-       <Link to='/cart'>
-         {/* CART */}
-      <div className="flex items-center">
-        <div className="mr-[20px] cursor-pointer relative left-[5px]">
-          <Badge badgeContent={2} color="secondary">
-            <ShoppingBasketIcon className="text-green-950"  />
-          </Badge>
+        {/* Right Actions */}
+        <div className="flex items-center gap-8">
+          <Link to="/cart" className="relative group transition-transform hover:scale-110 flex items-center">
+            <FaShoppingBag className="text-xl text-gray-600 group-hover:text-green-700 transition-colors" />
+          </Link>
+          
+          <Link to="/login" className="flex items-center">
+            <button className="flex items-center gap-2 bg-green-600 hover:bg-green-800 text-white px-6 py-2 rounded-full text-[11px] font-bold tracking-widest transition-all shadow-md active:scale-95 leading-none">
+              <FaUserCircle className="text-sm" />
+              <span>LOGIN</span>
+            </button>
+          </Link>
         </div>
       </div>
-      {/* LOGIN */}
-       </Link>
-      <Link to="/login">
-        <div className="flex items-center gap-2 border border-[#8FE388] px-4 py-2 rounded-lg cursor-pointer hover:bg-[#8FE388] hover:text-white transition">
-        <FaUser />
-        <span className="font-semibold">Login</span>
+
+      {/* Search */}
+      <div className="md:hidden px-4 pb-4">
+        <form onSubmit={handleSearch} className="relative flex items-center">
+          <input 
+            type="text" 
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder="Search Products" 
+            className="w-full bg-gray-50 border border-gray-200 rounded-full py-2 px-5 focus:outline-none"
+          />
+          <FaSearch className="absolute right-5 text-gray-400" />
+        </form>
       </div>
-      </Link>
-    </div>
+    </nav>
   );
 };
 

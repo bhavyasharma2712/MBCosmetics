@@ -1,16 +1,27 @@
-import Banner from "../components/Banner"
-import Category from "../components/Category"
-import Footer from "../components/Footer"
-import Products from "../components/Products"
+import React, { useRef } from "react";
+import Banner from "../components/Banner";
+import Category from "../components/Category";
+import Products from "../components/Products";
+
 const Home = () => {
+  const productsRef = useRef(null);
+
+  const scrollToProducts = () => {
+    productsRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
     <div>
-      <Banner />
-      <Category />
-      <Products />
+      <Banner onShopNowClick={scrollToProducts} />
       
-    </div>
-  )
-}
+      <Category />
 
-export default Home
+      {/* Added scroll-mt-24 to stop the scroll a bit higher up */}
+      <div ref={productsRef} className="scroll-mt-24">
+        <Products />
+      </div>
+    </div>
+  );
+};
+
+export default Home;

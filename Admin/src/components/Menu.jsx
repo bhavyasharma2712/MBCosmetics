@@ -1,87 +1,68 @@
-import {
-  FaBox,
-  FaChartBar,
-  FaClipboard,
-  FaClipboardList,
-  FaCog,
-  FaElementor,
-  FaHdd,
-  FaHome,
-  FaSignOutAlt,
-  FaUser,
-  FaUsers,
-} from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
-const menuItems = [
-  {
-    group: 1,
-    items: [
-      { icon: FaHome, label: "Home", path: "/" },
-      { icon: FaUser, label: "Profile" },
-    ],
-  },
-  {
-    group: 2,
-    items: [
-      { icon: FaUsers, label: "Users", path: "/users" },
-      { icon: FaBox, label: "Products", path: "/products" },
-      { icon: FaClipboardList, label: "Orders", path: "/orders" },
-    ],
-  },
-  {
-    group: 3,
-    items: [
-      { icon: FaElementor, label: "Banners", path:"/banners" },
-      { icon: FaCog, label: "Settings" },
-      { icon: FaHdd, label: "Backups" },
-    ],
-  },
-  {
-    group: 4,
-    items: [
-      { icon: FaChartBar, label: "Charts" },
-      { icon: FaClipboard, label: "All Logs" },
-      { icon: FaSignOutAlt, label: "Logout" },
-    ],
-  },
+const navItems = [
+  { to: "/", label: "Home", icon: "🏠" },
+  { to: "/profile", label: "Profile", icon: "👤" },
+  { to: "/users", label: "Users", icon: "👥" },
+  { to: "/products", label: "Products", icon: "📦" },
+  { to: "/orders", label: "Orders", icon: "📋" },
+  { to: "/banners", label: "Banners", icon: "🖼️" },
+  { to: "/settings", label: "Settings", icon: "⚙️" },
+  { to: "/backups", label: "Backups", icon: "💾" },
+  { to: "/charts", label: "Charts", icon: "📊" },
+  { to: "/logs", label: "All logs", icon: "📋" },
 ];
 
-const Menu = () => {
+function Menu() {
   return (
-    <div className="h-[200vh] bg-gray-100 p-[20px] w-[300px] shadow-lg">
-      <ul className="flex flex-col items-start justify-start mt-[20px] pl-[10px]">
-        {menuItems.map(({ group, items }, groupIndex) => (
-          <>
-            {items.map(({ icon: Icon, label, path }) => (
-              <li
-                key={label}
-                className="group flex items-center w-full text-[20px] cursor-pointer mt-[20px] px-3 py-2 rounded-md transition-colors hover:bg-green-400 hover:text-white"
-              >
-                {path ? (
-                  <Link to={path} className="flex items-center w-full">
-                    <Icon className="mr-[15px] text-[#8FE388] group-hover:text-white transition-colors" />
-                    {label}
-                  </Link>
-                ) : (
-                  <>
-                    <Icon className="mr-[15px] text-[#8FE388] group-hover:text-white transition-colors" />
-                    {label}
-                  </>
-                )}
-              </li>
-            ))}
-            {groupIndex < menuItems.length - 1 && (
-              <hr
-                key={`hr-${group}`}
-                className="w-full my-[20px] border-gray-300"
-              />
-            )}
-          </>
+    <div style={{ display: "flex", flexDirection: "column", height: "100%", padding: "0 1rem" }}>
+      
+      <nav style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+        {navItems.map((item) => (
+          <NavLink
+            key={item.to}
+            to={item.to}
+            end={item.to === "/"}
+            style={({ isActive }) => ({
+              display: "flex",
+              alignItems: "center",
+              gap: "14px",
+              padding: "0.9rem 1.2rem",
+              borderRadius: "14px",
+              textDecoration: "none",
+              fontSize: "1rem", 
+              fontWeight: isActive ? "800" : "700", 
+              color: isActive ? "#065f46" : "#cbd5e1", 
+              background: isActive ? "#d1fae5" : "transparent",
+              transition: "all 0.2s ease-in-out",
+              boxShadow: isActive ? "0 4px 12px rgba(16, 185, 129, 0.2)" : "none",
+            })}
+          >
+            <span style={{ fontSize: "1.3rem" }}>{item.icon}</span>
+            {item.label}
+          </NavLink>
         ))}
-      </ul>
+      </nav>
+
+      <div style={{ marginTop: "auto", paddingTop: "2rem", paddingBottom: "1.5rem" }}>
+        <NavLink
+          to="/logout"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "14px",
+            padding: "1rem 1.2rem",
+            textDecoration: "none",
+            color: "#f87171", 
+            fontSize: "1rem",
+            fontWeight: "900",
+          }}
+        >
+          <span style={{ fontSize: "1.3rem" }}>↪️</span> Logout
+        </NavLink>
+      </div>
     </div>
   );
-};
+}
 
 export default Menu;
