@@ -11,25 +11,23 @@ import {
   REGISTER,
   REHYDRATE,
 } from "redux-persist";
+
+import { persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 
-// persist config
 const persistConfig = {
   key: "root",
   version: 1,
   storage,
 };
 
-// combine reducers
 const rootReducer = combineReducers({
   user: userReducer,
   cart: cartReducer,
 });
 
-// persist reducer
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-// store
 export const store = configureStore({
   reducer: persistedReducer,
 
@@ -48,4 +46,4 @@ export const store = configureStore({
     }),
 });
 
-export let persistor = persistStore(store);
+export const persistor = persistStore(store);

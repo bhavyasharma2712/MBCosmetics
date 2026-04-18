@@ -1,10 +1,43 @@
-.dashboard-wrapper {
-  background-color: white;
-  min-height: 100vh;
-  width: 100vw;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+* {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
+}
+
+body, html {
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+}
+
+.main-container {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+  background-color: #f4f7fe; /* Light dashboard background */
+}
+
+.menu-container {
+  width: 250px;
+  min-width: 250px;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  background-color: #fff;
+  border-right: 1px solid #eee;
+}
+
+.content-container {
+  flex-grow: 1;
+  padding: 25px;
+  background-color: #f4f7fe;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Ensure Home.jsx content stretches */
+.home-container {
+  width: 100%;
+  max-width: 1400px; /* Prevents extreme stretching on ultra-wide screens */
+  margin: 0 auto;
 }

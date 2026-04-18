@@ -13,11 +13,10 @@ const ProductSchema = mongoose.Schema({
 
   whatinbox: {
     type: String,
-    require: true,
   },
 
   img: {
-    type: String,
+    type: Array,
     require: true,
   },
 
@@ -42,11 +41,11 @@ const ProductSchema = mongoose.Schema({
   },
 
   brand: {
-    type: Array,
+    type: String,
   },
 
   skintype: {
-    type: String,
+    type: Array,
   },
 
   originalPrice: {
@@ -71,6 +70,7 @@ const ProductSchema = mongoose.Schema({
     },
   ],
 });
+
 ProductSchema.index({"$**": "text"})
 const Product = mongoose.model("Product", ProductSchema);
 export default Product;
