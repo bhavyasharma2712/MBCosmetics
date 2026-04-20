@@ -11,7 +11,10 @@ import orderRoute from "./routes/order.route.js";
 const app = express();
 
 //cors
-app.use(cors());
+app.use(cors({
+  origin: ["http://localhost:3000", "http://localhost:5173"],
+  credentials: true,
+}));
 
 //json body
 app.use(express.json());
@@ -25,8 +28,6 @@ app.use("/api/v1/products", productRoute);
 app.use("/api/v1/banners", bannerRoute);
 app.use("/api/v1/users", userRoute);
 app.use("/api/v1/orders", orderRoute);
-
-
 
 //error middleware
 app.use(notFound);

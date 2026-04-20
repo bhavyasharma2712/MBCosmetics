@@ -69,7 +69,7 @@ function Layout() {
             </svg>
           </div>
           <span style={{ fontWeight: 700, fontSize: "1.05rem", letterSpacing: "-0.01em", color: "#fff" }}>
-            CosmeticStore
+            MB Cosmetics
           </span>
         </div>
 

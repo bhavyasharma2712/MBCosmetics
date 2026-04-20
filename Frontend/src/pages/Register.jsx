@@ -1,7 +1,32 @@
-import { Link } from "react-router-dom";
-const Login = () => {
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { userRequest } from "../requestMethods";
+import { toast, ToastContainer } from "react-toastify";
+
+const Register = () => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
+  const handleRegister = async (e) => {
+    e.preventDefault();
+
+    try {
+      await userRequest.post("/auth/register", { name, email, password });
+      navigate("/login");
+    } catch (error) {
+      if (error.response && error.response.data.message) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error("An unexpected error occurred. Please try again.");
+      }
+    }
+  };
+
   return (
     <div className="flex items-center justify-center mt-[2%]">
+      <ToastContainer />
       <div className="flex items-center bg-white shadow-lg rounded-lg overflow-hidden">
         {/* IMAGE */}
         <div className="h-[500px] w-[500px] transition-transform duration-700 ease-in-out transform hover:scale-105 mb-30">
@@ -17,7 +42,7 @@ const Login = () => {
           <h2 className="text-xl font-semibold text-gray-700 mb-5">
             Create Account
           </h2>
-          <form className="spay-y-5">
+          <form className="spay-y-5" onSubmit={handleRegister}>
             <div>
               <label htmlFor="" className="block text-gray-600 mb-1">
                 Full Name
@@ -26,6 +51,8 @@ const Login = () => {
                 type="text"
                 className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#8FE388]"
                 placeholder="John Doe"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
               />
             </div>
             <div>
@@ -36,6 +63,8 @@ const Login = () => {
                 type="text"
                 className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#8FE388]"
                 placeholder="example@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
             <div className="mb-30">
@@ -43,16 +72,21 @@ const Login = () => {
                 Password
               </label>
               <input
-                type="text"
+                type="password"
                 className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#8FE388]"
                 placeholder="*********"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
             </div>
-            <button className="w-full py-2 bg-[#62d058] text-white font-bold rounded-md transition-transform duration-500 mt-5 hover:bg-green-800 focus:outline-none focus:ring-red-500 transform hover:scale-105 ">
+            <button
+              type="submit"
+              className="w-full py-2 bg-[#62d058] text-white font-bold rounded-md transition-transform duration-500 mt-5 hover:bg-green-800 focus:outline-none focus:ring-red-500 transform hover:scale-105"
+            >
               Create Account
             </button>
 
-            <div className="mt-4 text-sm text-gray-600 font-semibold ">
+            <div className="mt-4 text-sm text-gray-600 font-semibold">
               <span>Already have an account? </span>
               <Link to="/login" className="text-green-700 hover:underline">
                 Sign In
@@ -65,4 +99,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;  
