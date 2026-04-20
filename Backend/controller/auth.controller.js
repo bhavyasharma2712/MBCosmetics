@@ -22,7 +22,7 @@ const registerUser = asyncHandler(async (req, res) => {
   });
 
   if (user) {
-    generateToken(user._id);
+    generateToken(res, user._id);
     res.status(201).json({
       _id: user._id,
       name: user.name,

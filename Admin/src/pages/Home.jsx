@@ -5,9 +5,9 @@ import { userRequest } from "../requestMethods";
 
 const Home = () => {
   const [stats, setStats] = useState({
-    totalProducts: 5,
+    totalProducts: 6,
     activeOrders: 6,
-    activeUsers: 1,
+    activeUsers: 2,
     totalRevenue: 56000,
     totalLosses: 0
   });

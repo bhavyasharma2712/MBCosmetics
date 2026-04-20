@@ -60,29 +60,12 @@ const NewProduct = () => {
       "Face Oils", "Exfoliators & Scrubs", "Sunscreen", "BB & CC Creams",
       "Concealers", "Powders", "Blush", "Bronzers", "Highlighters", "Eyeshadow",
       "Eyeliner", "Mascara", "Eyebrow Products", "Lipstick", "Lip Gloss",
-      "Lip Liner", "Makeup Remover", "Setting Sprays", "Primers", "Shampoo",
-      "Conditioner", "Hair Masks", "Hair Oils", "Hair Serums", "Hair Styling",
-      "Hair Color", "Hair Treatment", "Perfume", "Cologne", "Body Spray",
-      "Body Lotion", "Body Wash", "Body Scrubs", "Hand Cream", "Body Oil",
-      "Makeup Brushes", "Beauty Blenders", "Hair Tools", "Skincare Tools",
-      "Shaving Products", "Beard Care", "Aftershave", "Toothpaste", "Mouthwash",
-      "Teeth Whitening", "Vitamins", "Supplements"
+      "Lip Liner", "Makeup Remover", "Setting Sprays", "Primers"
     ],
     concern: [
       "Dry Skin", "Pigmentation", "Oil Control", "Anti Acne", "Sunburn",
       "Skin Brightening", "Tan Removal", "Night Routine", "UV Protection",
-       "Color Protection", "Soothing",
-      "Well Being", "Acne",  "Anti Aging", "Wrinkles", "Fine Lines",
-      "Dark Spots", "Hyperpigmentation", "Redness", "Irritation", "Sensitivity",
-      "Rosacea", "Eczema", "Psoriasis", "Dark Circles", "Puffy Eyes",
-      "Large Pores", "Blackheads", "Whiteheads", "Clogged Pores",
-      "Uneven Skin Tone", "Dull Skin", "Dehydrated Skin", "Combination Skin",
-      "Oily Scalp", "Dry Scalp", "Hair Breakage", "Split Ends", "Thinning Hair", "Curly Hair", "Straight Hair", "Wavy Hair",
-      "Color Treated Hair", "Chemical Damage", "Heat Damage", "Body Acne",
-      "Back Acne", "Body Odor", "Dry Hands", "Cracked Heels", "Cellulite",
-      "Sun Damage", "Pollution Protection", "Blue Light Protection",
-      "Menstrual Care", "Stress Relief", "Sleep Aid", "Energy Boost",
-      "Immune Support", "Gut Health"
+       "Color Protection", "Soothing"
     ],
     skintype: [
       "All", "Oily", "Dry", "Sensitive", "Normal", "Combination",
