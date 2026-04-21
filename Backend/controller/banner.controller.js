@@ -3,8 +3,31 @@ import asyncHandler from "express-async-handler";
 
 //CREATE BANNER
 const createBanner = asyncHandler(async (req, res) => {
-  const newBanner = Banner(req.body);
-  const savedBanner = newBanner.save();
+  console.log("req.body:", req.body);
+  console.log("req.file:", req.file);
+
+  const title = req.body?.title;
+  const subtitle = req.body?.subtitle;
+
+  if (!req.file) {
+    res.status(400);
+    throw new Error("Banner image is required");
+  }
+
+  if (!title) {
+    res.status(400);
+    throw new Error("Title is required");
+  }
+
+  if (!subtitle) {
+    res.status(400);
+    throw new Error("Subtitle is required");
+  }
+
+  const img = `/uploads/banners/${req.file.filename}`;
+
+  const newBanner = new Banner({ title, subtitle, img });
+  const savedBanner = await newBanner.save();
 
   if (!savedBanner) {
     res.status(400);
@@ -21,7 +44,7 @@ const deleteBanner = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error("Banner was not deleted");
   } else {
-    res.status(201).json("Banner was deleted successfully");
+    res.status(200).json("Banner was deleted successfully");
   }
 });
 
@@ -32,21 +55,21 @@ const getAllBanners = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error("Banner was not fetched or something went wrong");
   } else {
-    res.status(201).json(banners);
+    res.status(200).json(banners);
   }
 });
 
-//GET RANDOM BANNERS
+//GET RANDOM BANNER
 const getRandomBanner = asyncHandler(async (req, res) => {
   const banners = await Banner.find();
 
-  if (!banners) {
+  if (!banners || banners.length === 0) {
     res.status(400);
-    throw new Error("Banner was not fetched or something went wrong");
+    throw new Error("No banners found");
   } else {
     const randomIndex = Math.floor(Math.random() * banners.length);
     const randomBanner = banners[randomIndex];
-    res.status(201).json(randomBanner);
+    res.status(200).json(randomBanner);
   }
 });
 
