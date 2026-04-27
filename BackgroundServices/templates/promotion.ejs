@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Your Order Has Been Delivered, MB Cosmetics</title>
+    <title>MB Cosmetics - Product Promotion</title>
     <style type="text/css">
       body {
         margin: 0;
@@ -17,7 +17,7 @@
       }
 
       a {
-      
+        color: #40d533;
         text-decoration: none;
       }
 
@@ -30,11 +30,6 @@
         text-align: center;
       }
 
-      p {
-        margin-top: 0;
-        margin-bottom: 24px;
-      }
-
       .email-wrapper {
         max-width: 700px;
         margin: 0 auto;
@@ -45,45 +40,66 @@
       .email-header {
         background-color: #1e1e1e;
         padding: 30px;
-        color: #f086d9;
+        color: #40d533;
         text-align: center;
       }
 
       .email-body {
         padding: 14px;
         background-color: #f4f3f3;
-        height: 70vh;
+        min-height: 70vh;
       }
 
       .email-footer {
         background-color: #1e1e1e;
         padding: 14px;
-        color: #d55fbb;
+        color: #40d533;
         text-align: center;
       }
 
+      img {
+        padding: 24px;
+        max-width: 100%;
+        height: auto;
+      }
+
       .product-list {
-        margin: 20px 0;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        gap: 20px;
       }
 
       .product-item {
-        display: flex;
-        align-items: center;
-        margin-bottom: 20px;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        padding: 15px;
+        width: 45%;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        text-align: center;
       }
 
-      .product-img {
-        max-width: 100px;
-        margin-right: 20px;
-      }
-
-      .product-details {
-        font-size: 14px;
-      }
-
-      img {
+      .product-item img {
         max-width: 100%;
         height: auto;
+        margin-bottom: 10px;
+      }
+
+      .product-item h3 {
+        font-size: 18px;
+        margin-bottom: 10px;
+      }
+
+      .product-item p {
+        margin-bottom: 20px;
+        color: #555;
+      }
+
+      .product-item a {
+        background-color: #40d533;
+        color: #fff;
+        padding: 10px 20px;
+        border-radius: 5px;
       }
     </style>
   </head>
@@ -91,38 +107,34 @@
     <div class="email-wrapper">
       <div class="email-header">
         <img
-          src="https://res.cloudinary.com/dkgcdpask/image/upload/v1773509590/logo_sgnuko.jpg"
+          src="https://res.cloudinary.com/dkgcdpask/image/upload/v1777311613/logo.png_iqlnff.png"
           height="200px"
           width="200px"
-          alt="Logo"
+          alt="MB Cosmetics Logo"
         />
       </div>
       <div class="email-body">
-        <h1>Your Order Has Been Delivered</h1>
-        <p>Hello <%= name %>,</p>
         <p>
-          We are happy to inform you that your order has been successfully delivered. We hope you love your new beauty products and enjoy using them.
+          We are thrilled to introduce some of our featured beauty products just
+          for you. These products are carefully selected to enhance your beauty
+          routine and provide you with the best results.
         </p>
-        <div class="divider"></div>
-        <h2>Order Summary</h2>
+
         <div class="product-list">
           <% products.forEach(function(product) { %>
           <div class="product-item">
-            <img
-              class="product-img"
-              src="<%= product.img %>"
-              alt="<%= product.title %>"
-            />
-            <div class="product-details">
-              <p><strong>Product:</strong> <%= product.title %></p>
-              <p><strong>Quantity:</strong> <%= product.quantity %></p>
-              <p><strong>Price:</strong> $<%= product.price %></p>
-            </div>
+            <img src="<%= product.img %>" alt="<%= product.name %>" />
+            <h3><%= product.name %></h3>
+            <p><%= product.description %></p>
+            <a href="<%= product.link %>">Shop Now</a>
           </div>
-          <% }); %>
+          <% }) %>
         </div>
-        <p>If you have any questions or need further assistance, feel free to <a href="">contact us</a>.</p>
-        <p>Thank you for shopping with us!</p>
+
+        <p>
+          Stay tuned for more exclusive offers and beauty tips. Thank you for
+          being a part of MB Cosmetics!
+        </p>
       </div>
       <div class="email-footer">
         <p>&copy;2026 MB Cosmetics. All rights reserved.</p>

@@ -1,22 +1,36 @@
 import { useParams } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Products from "../components/Products";
-import productsData from "../components/productsData";
+import { userRequest } from "../requestMethods";
 
 const ProductList = () => {
   const { searchterm } = useParams();
   const [concern, setConcern] = useState("All");
   const [brand, setBrand] = useState("All");
   const [sort, setSort] = useState("newest");
+  const [allProducts, setAllProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    userRequest
+      .get("/products")
+      .then((res) => setAllProducts(res.data))
+      .catch((err) => console.error("Failed to fetch products:", err))
+      .finally(() => setLoading(false));
+  }, []);
 
   let filtered = searchterm
-    ? productsData.filter((p) =>
-        p.name.toLowerCase().includes(searchterm.toLowerCase())
+    ? allProducts.filter((p) =>
+        p.title?.toLowerCase().includes(searchterm.toLowerCase())
       )
-    : [...productsData];
+    : [...allProducts];
 
   if (concern !== "All") {
-    filtered = filtered.filter((p) => p.concern === concern);
+    filtered = filtered.filter((p) =>
+      Array.isArray(p.concern)
+        ? p.concern.includes(concern)
+        : p.concern === concern
+    );
   }
 
   if (brand !== "All") {
@@ -24,9 +38,9 @@ const ProductList = () => {
   }
 
   if (sort === "asc") {
-    filtered.sort((a, b) => a.price - b.price);
+    filtered.sort((a, b) => (a.discountedPrice || a.originalPrice || 0) - (b.discountedPrice || b.originalPrice || 0));
   } else if (sort === "desc") {
-    filtered.sort((a, b) => b.price - a.price);
+    filtered.sort((a, b) => (b.discountedPrice || b.originalPrice || 0) - (a.discountedPrice || a.originalPrice || 0));
   } else {
     filtered.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
   }
@@ -101,7 +115,11 @@ const ProductList = () => {
         </div>
       )}
 
-      {filtered.length === 0 ? (
+      {loading ? (
+        <div className="text-center py-20 text-gray-400">
+          <p className="text-xl">Loading products...</p>
+        </div>
+      ) : filtered.length === 0 ? (
         <div className="text-center py-20 text-gray-500">
           <p className="text-xl font-semibold">No products found</p>
           <p className="text-sm mt-2">Try adjusting your filters.</p>

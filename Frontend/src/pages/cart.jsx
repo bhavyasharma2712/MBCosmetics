@@ -1,16 +1,16 @@
 import { FaMinus, FaPlus, FaTrashAlt } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { removeProduct, clearCart } from "../redux/cartRedux";
 
 const Cart = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { products, total } = useSelector((state) => state.cart);
   const shipping = products.length > 0 ? 70 : 0;
 
   const handleIncrease = (product) => {
-    dispatch(
-      removeProduct({ id: product.id })
-    );
+    dispatch(removeProduct({ id: product.id }));
     dispatch({
       type: "cart/addProduct",
       payload: { ...product, quantity: product.quantity + 1 },
@@ -122,7 +122,10 @@ const Cart = () => {
                 </span>
               </div>
 
-              <button className="bg-[#1b5e15] text-white p-3 w-full rounded-lg font-semibold">
+              <button
+                onClick={() => navigate("/checkout")}
+                className="bg-[#1b5e15] text-white p-3 w-full rounded-lg font-semibold"
+              >
                 Proceed to Checkout
               </button>
             </div>
