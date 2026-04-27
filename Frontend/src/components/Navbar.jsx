@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaSearch, FaShoppingBag, FaUserCircle } from 'react-icons/fa';
+import { useSelector } from 'react-redux';
 
 const Navbar = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
+  const currentUser = useSelector((state) => state.user.currentUser);
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -56,10 +58,10 @@ const Navbar = () => {
             <FaShoppingBag className="text-xl text-gray-600 group-hover:text-green-700 transition-colors" />
           </Link>
           
-          <Link to="/login" className="flex items-center">
+          <Link to={currentUser ? "/myaccount" : "/login"} className="flex items-center">
             <button className="flex items-center gap-2 bg-green-600 hover:bg-green-800 text-white px-6 py-2 rounded-full text-[11px] font-bold tracking-widest transition-all shadow-md active:scale-95 leading-none">
               <FaUserCircle className="text-sm" />
-              <span>LOGIN</span>
+             <span>{currentUser ? (currentUser.username || currentUser.name || currentUser.email || "ACCOUNT").toUpperCase() : "LOGIN"}</span>
             </button>
           </Link>
         </div>

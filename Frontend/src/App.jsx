@@ -10,7 +10,8 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ProductList from "./pages/ProductList";
 import Order from "./pages/Order";
-import ScrollToTop from "./components/ScrollToTop"; 
+import Checkout from "./pages/Checkout";
+import ScrollToTop from "./components/ScrollToTop";
 
 const Layout = () => {
   return (
@@ -31,6 +32,7 @@ const router = createBrowserRouter([
     children: [
       { path: "/", element: <Home /> },
       { path: "/cart", element: <Cart /> },
+      { path: "/checkout", element: <Checkout /> },
       { path: "/login", element: <Login /> },
       { path: "/create-account", element: <Register /> },
       { path: "/myaccount", element: <Myaccount /> },
@@ -42,7 +44,7 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  return <RouterProvider router={router} />
+  return <RouterProvider router={router} />;
 }
 
-export default App
+export default App;

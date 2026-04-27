@@ -1,18 +1,20 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { userRequest } from "../requestMethods";
 import { toast, ToastContainer } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { login } from "../redux/apiCalls"
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleLogin = async (e) => {
     e.preventDefault();
 
     try {
-      await userRequest.post("/auth/login", { email, password });
+      await login(dispatch, { email, password });
       navigate("/");
     } catch (error) {
       if (error.response && error.response.data.message) {

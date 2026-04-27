@@ -10,7 +10,7 @@ router.post("/", createOrder);
 router.put("/:id", updateOrder);
 
 //GET ALL ORDERS ROUTE
-router.get("/", protect, getAllOrders);
+router.get("/", getAllOrders);
 
 //DELETE ORDER ROUTE
 router.delete("/:id", deleteOrder);

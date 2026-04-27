@@ -9,6 +9,7 @@ import productRoute from "./routes/product.route.js";
 import bannerRoute from "./routes/banner.route.js";
 import userRoute from "./routes/user.route.js";
 import orderRoute from "./routes/order.route.js";
+import paymentRoute from "./routes/payment.route.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -36,6 +37,7 @@ app.use("/api/v1/products", productRoute);
 app.use("/api/v1/banners", bannerRoute);
 app.use("/api/v1/users", userRoute);
 app.use("/api/v1/orders", orderRoute);
+app.use("/api/v1/payment", paymentRoute);
 
 //error middleware
 app.use(notFound);
