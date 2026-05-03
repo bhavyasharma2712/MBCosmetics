@@ -3,6 +3,8 @@ import Banner from "../components/Banner";
 import Category from "../components/Category";
 import Products from "../components/Products";
 
+const BEST_SELLERS = ["Luron Eyeliner", "Kylie Volume Boost Mascara", "Heaven Dove Toner", "Kiss Beauty Velvet Matte Lipstick", "Luminous Complexion Foundation"];
+
 const Home = () => {
   const productsRef = useRef(null);
 
@@ -13,11 +15,8 @@ const Home = () => {
   return (
     <div>
       <Banner onShopNowClick={scrollToProducts} />
-      
       <Category />
-
       <div ref={productsRef} className="scroll-mt-24">
-        {/* Best Sellers Header */}
         <div className="flex flex-col items-center py-10">
           <span className="text-xs font-semibold tracking-[0.25em] text-green-600 uppercase mb-2">
             Our Collection
@@ -31,7 +30,7 @@ const Home = () => {
             <div className="h-px w-16 bg-green-200" />
           </div>
         </div>
-        <Products />
+        <Products bestSellers={BEST_SELLERS} />
       </div>
     </div>
   );

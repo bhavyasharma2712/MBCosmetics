@@ -10,7 +10,7 @@ const hardcodedRatings = {
   "Nivea Face Wash for Men.": { rating: 4.2, reviewCount: 2 },
 };
 
-const Products = ({ products: filteredProducts }) => {
+const Products = ({ products: filteredProducts, bestSellers }) => {
   const [apiProducts, setApiProducts] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -25,7 +25,11 @@ const Products = ({ products: filteredProducts }) => {
     }
   }, [filteredProducts]);
 
-  const list = filteredProducts !== undefined ? filteredProducts : apiProducts;
+  const list = filteredProducts !== undefined
+    ? filteredProducts
+    : bestSellers
+      ? apiProducts.filter(p => bestSellers.includes(p.title))
+      : apiProducts;
 
   if (loading) {
     return (

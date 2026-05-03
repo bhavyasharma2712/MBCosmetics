@@ -2,19 +2,23 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { userRequest } from "../requestMethods";
 import { toast, ToastContainer } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { login } from "../redux/apiCalls";
 
 const Register = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleRegister = async (e) => {
     e.preventDefault();
 
     try {
       await userRequest.post("/auth/register", { name, email, password });
-      navigate("/login");
+      await login(dispatch, { email, password });
+      navigate("/");
     } catch (error) {
       if (error.response && error.response.data.message) {
         toast.error(error.response.data.message);
@@ -99,4 +103,4 @@ const Register = () => {
   );
 };
 
-export default Register;  
+export default Register;

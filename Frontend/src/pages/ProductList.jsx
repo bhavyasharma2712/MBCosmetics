@@ -4,7 +4,7 @@ import Products from "../components/Products";
 import { userRequest } from "../requestMethods";
 
 const ProductList = () => {
-  const { searchterm } = useParams();
+  const { searchterm, category } = useParams();
   const [concern, setConcern] = useState("All");
   const [brand, setBrand] = useState("All");
   const [sort, setSort] = useState("newest");
@@ -19,11 +19,21 @@ const ProductList = () => {
       .finally(() => setLoading(false));
   }, []);
 
-  let filtered = searchterm
-    ? allProducts.filter((p) =>
-        p.title?.toLowerCase().includes(searchterm.toLowerCase())
-      )
-    : [...allProducts];
+  let filtered = [...allProducts];
+
+  if (category) {
+    filtered = filtered.filter((p) =>
+      Array.isArray(p.categories)
+        ? p.categories.some(c => c.toLowerCase() === category.toLowerCase())
+        : p.category?.toLowerCase() === category.toLowerCase()
+    );
+  }
+
+  if (searchterm) {
+    filtered = filtered.filter((p) =>
+      p.title?.toLowerCase().includes(searchterm.toLowerCase())
+    );
+  }
 
   if (concern !== "All") {
     filtered = filtered.filter((p) =>
@@ -47,16 +57,17 @@ const ProductList = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
+      {category && (
+        <div className="mx-4 mb-6">
+          <h1 className="text-2xl font-bold text-green-700 capitalize">{category}</h1>
+          <p className="text-sm text-gray-500 mt-1">{filtered.length} product{filtered.length !== 1 ? "s" : ""} found</p>
+        </div>
+      )}
+
       <div className="flex justify-between m-4">
-        {/* LEFT */}
         <div className="flex flex-col sm:flex-row sm:items-center">
           <span className="text-l font-semibold mr-4">Filter Products:</span>
-          <select
-            name="Concern"
-            className="p-2 mb-4 sm:mb-0 mr-4"
-            value={concern}
-            onChange={(e) => setConcern(e.target.value)}
-          >
+          <select name="Concern" className="p-2 mb-4 sm:mb-0 mr-4" value={concern} onChange={(e) => setConcern(e.target.value)}>
             <option value="All">All Concerns</option>
             <option>Dry Skin</option>
             <option>Pigmentation</option>
@@ -68,13 +79,7 @@ const ProductList = () => {
             <option>Night Routine</option>
             <option>UV Protection</option>
           </select>
-
-          <select
-            name="Brand"
-            className="p-2 mb-4 sm:mb-0 mr-4"
-            value={brand}
-            onChange={(e) => setBrand(e.target.value)}
-          >
+          <select name="Brand" className="p-2 mb-4 sm:mb-0 mr-4" value={brand} onChange={(e) => setBrand(e.target.value)}>
             <option value="All">All Brands</option>
             <option>AquaClear</option>
             <option>Luminous</option>
@@ -83,21 +88,14 @@ const ProductList = () => {
             <option>Luron</option>
             <option>Nivea</option>
             <option>Heaven Dove</option>
-            <option>Disaar</option>
-            <option>Johnsons Baby</option>
             <option>Rexona</option>
             <option>Kylie</option>
           </select>
         </div>
 
-        {/* RIGHT */}
         <div className="flex flex-col sm:flex-row sm:items-center">
           <span className="text-lg font-semibold mr-4">Sort Products:</span>
-          <select
-            name="Price"
-            value={sort}
-            onChange={(e) => setSort(e.target.value)}
-          >
+          <select name="Price" value={sort} onChange={(e) => setSort(e.target.value)}>
             <option value="newest">Newest</option>
             <option value="asc">Price (asc)</option>
             <option value="desc">Price (desc)</option>
@@ -108,8 +106,7 @@ const ProductList = () => {
       {searchterm && (
         <div className="mx-4 mb-4">
           <p className="text-gray-600 text-sm">
-            Showing results for:{" "}
-            <span className="font-semibold text-green-700">"{searchterm}"</span>
+            Showing results for: <span className="font-semibold text-green-700">"{searchterm}"</span>
             {" "}— {filtered.length} product{filtered.length !== 1 ? "s" : ""} found
           </p>
         </div>
