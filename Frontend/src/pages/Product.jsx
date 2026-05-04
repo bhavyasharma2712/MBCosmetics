@@ -28,6 +28,14 @@ const hardcodedReviews = {
   ],
 };
 
+const getImageUrl = (img) => {
+  const raw = Array.isArray(img) ? img[0] : img;
+  if (!raw) return "/placeholder.png";
+  if (raw.startsWith("http")) return raw;
+  if (raw.startsWith("/uploads/")) return `https://mbcosmetics.onrender.com${raw}`;
+  return raw;
+};
+
 const Product = () => {
   const { productId } = useParams();
   const [product, setProduct] = useState(null);
@@ -48,7 +56,7 @@ const Product = () => {
   if (loading) return <h2 className="p-10 text-gray-400">Loading...</h2>;
   if (!product) return <h2 className="p-10">Product not found</h2>;
 
-  const img = Array.isArray(product.img) ? product.img[0] : product.img;
+  const img = getImageUrl(product.img);
   const price = product.discountedPrice || product.originalPrice || 0;
 
   const dbRatings = product.ratings || [];
