@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 
-const BASE_URL = "http://localhost:8000";
-const INTERVAL_MS = 5000; // change banner every 5 seconds
+const BASE_URL = "https://mbcosmetics.onrender.com";
+const INTERVAL_MS = 5000;
 
 const Banner = ({ onShopNowClick }) => {
   const [banners, setBanners] = useState([]);
@@ -40,7 +40,15 @@ const Banner = ({ onShopNowClick }) => {
   }, [banners]);
 
   const banner = banners[currentIndex];
-  const bgImage = banner?.img ? `${BASE_URL}${banner.img}` : "/bannerweb.png";
+
+  const getBannerImage = (img) => {
+    if (!img) return "/bannerweb.png";
+    if (img.startsWith("http")) return img;
+    if (img.startsWith("/uploads/")) return `${BASE_URL}${img}`;
+    return img;
+  };
+
+  const bgImage = getBannerImage(banner?.img);
   const title = banner?.title || "Reveal Your Natural Radiance";
   const subtitle = banner?.subtitle || "with our premium beauty collection";
 

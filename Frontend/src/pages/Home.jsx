@@ -3,7 +3,13 @@ import Banner from "../components/Banner";
 import Category from "../components/Category";
 import Products from "../components/Products";
 
-const BEST_SELLERS = ["Luron Eyeliner", "Kylie Volume Boost Mascara", "Heaven Dove Toner", "Kiss Beauty Velvet Matte Lipstick", "Luminous Complexion Foundation"];
+const BEST_SELLERS = [
+  "Dr Rashel's Salicylic Acid 2% Face Serum",
+  "Rexona Face Wash for Women",
+  "AquaClear Hydrating Toner for Men",
+  "Dr Rashel Sunscreen SPF 50",
+  "Luminous Hydration Boost Day & Night Moisturizer",
+];
 
 const Home = () => {
   const productsRef = useRef(null);
