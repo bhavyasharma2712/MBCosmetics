@@ -1,5 +1,5 @@
 import axios from "axios";
 
 export const userRequest = axios.create({
-  baseURL: "http://localhost:8000/api/v1",
+  baseURL: "https://mbcosmetics.onrender.com/api/v1",
 });
