@@ -47,6 +47,14 @@ const Products = ({ products: filteredProducts, bestSellers }) => {
     );
   }
 
+  const getImageUrl = (img) => {
+    const raw = Array.isArray(img) ? img[0] : img;
+    if (!raw) return "/placeholder.png";
+    if (raw.startsWith("http")) return raw;
+    if (raw.startsWith("/uploads/")) return `https://mbcosmetics.onrender.com${raw}`;
+    return raw;
+  };
+
   return (
     <div className="grid grid-cols-5 gap-4 mx-[30px]">
       {list.map((p) => {
@@ -63,7 +71,7 @@ const Products = ({ products: filteredProducts, bestSellers }) => {
           <Product
             key={p._id || p.id}
             id={p._id || p.id}
-            img={Array.isArray(p.img) ? p.img[0] : p.img}
+            img={getImageUrl(p.img)}
             name={p.title || p.name}
             price={p.discountedPrice || p.originalPrice || p.price}
             rating={rating}
