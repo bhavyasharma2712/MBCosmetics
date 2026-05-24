@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 
 const INTERVAL_MS = 5000;
-const BASE_URL = "http://localhost:8000";
+const BASE_URL = import.meta.env.VITE_API_URL?.replace("/api/v1", "") || "http://localhost:8000";
 
 const FALLBACK_BANNER = {
   img: "/bannerweb.png",
