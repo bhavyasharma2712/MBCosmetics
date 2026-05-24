@@ -2,19 +2,27 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { userRequest } from "../requestMethods";
 import { toast, ToastContainer } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { login } from "../redux/apiCalls";
 
 const Register = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  // phone aur address ke liye naye states
+  const [phone, setPhone] = useState("");
+  const [address, setAddress] = useState("");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleRegister = async (e) => {
     e.preventDefault();
 
     try {
-      await userRequest.post("/auth/register", { name, email, password });
-      navigate("/login");
+      // phone aur address bhi bhej rahe hain backend ko
+      await userRequest.post("/auth/register", { name, email, password, phone, address });
+      await login(dispatch, { email, password });
+      navigate("/");
     } catch (error) {
       if (error.response && error.response.data.message) {
         toast.error(error.response.data.message);
@@ -42,11 +50,9 @@ const Register = () => {
           <h2 className="text-xl font-semibold text-gray-700 mb-5">
             Create Account
           </h2>
-          <form className="spay-y-5" onSubmit={handleRegister}>
+          <form className="space-y-3" onSubmit={handleRegister}>
             <div>
-              <label htmlFor="" className="block text-gray-600 mb-1">
-                Full Name
-              </label>
+              <label className="block text-gray-600 mb-1">Full Name</label>
               <input
                 type="text"
                 className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#8FE388]"
@@ -55,10 +61,9 @@ const Register = () => {
                 onChange={(e) => setName(e.target.value)}
               />
             </div>
+
             <div>
-              <label htmlFor="" className="block text-gray-600 mb-1">
-                Email
-              </label>
+              <label className="block text-gray-600 mb-1">Email</label>
               <input
                 type="text"
                 className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#8FE388]"
@@ -67,10 +72,9 @@ const Register = () => {
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
-            <div className="mb-30">
-              <label htmlFor="" className="block text-gray-600 mb-1">
-                Password
-              </label>
+
+            <div>
+              <label className="block text-gray-600 mb-1">Password</label>
               <input
                 type="password"
                 className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#8FE388]"
@@ -79,6 +83,31 @@ const Register = () => {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
+
+            {/* naya phone field */}
+            <div>
+              <label className="block text-gray-600 mb-1">Phone Number</label>
+              <input
+                type="tel"
+                className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#8FE388]"
+                placeholder="03001234567"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+              />
+            </div>
+
+            {/* naya address field */}
+            <div>
+              <label className="block text-gray-600 mb-1">Address</label>
+              <textarea
+                rows={2}
+                className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#8FE388]"
+                placeholder="Your delivery address"
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+              />
+            </div>
+
             <button
               type="submit"
               className="w-full py-2 bg-[#62d058] text-white font-bold rounded-md transition-transform duration-500 mt-5 hover:bg-green-800 focus:outline-none focus:ring-red-500 transform hover:scale-105"
@@ -99,4 +128,4 @@ const Register = () => {
   );
 };
 
-export default Register;  
+export default Register;

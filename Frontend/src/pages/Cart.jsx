@@ -7,7 +7,25 @@ const Cart = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { products, total } = useSelector((state) => state.cart);
+ 
+  const { currentUser } = useSelector((state) => state.user);
   const shipping = products.length > 0 ? 70 : 0;
+
+  // if logged out
+  if (!currentUser) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center text-gray-500">
+        <p className="text-2xl font-semibold mb-2">⚠️ You are not logged in</p>
+        <p className="text-sm mb-6">Please login first to view your cart.</p>
+        <button
+          onClick={() => navigate("/login")}
+          className="bg-[#1b5e15] text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-800 transition"
+        >
+          Login
+        </button>
+      </div>
+    );
+  }
 
   const handleIncrease = (product) => {
     dispatch(removeProduct({ id: product.id }));

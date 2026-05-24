@@ -10,7 +10,7 @@ const Product = () => {
   const [product, setProduct] = useState(null);
   const [formData, setFormData] = useState({});
 
-  // 🔥 Fetch product
+  // Fetch product
   useEffect(() => {
     const getProduct = async () => {
       try {
@@ -24,14 +24,14 @@ const Product = () => {
     getProduct();
   }, [id]);
 
-  // 🔄 Sync product → form
+  // Sync product → form
   useEffect(() => {
     if (product) {
       setFormData(product);
     }
   }, [product]);
 
-  // ✏️ Handle input change
+  // Handle input change
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -41,7 +41,7 @@ const Product = () => {
     }));
   };
 
-  // 🔥 Update product
+  // Update product
   const handleUpdate = async (e) => {
     e.preventDefault();
 
@@ -54,7 +54,7 @@ const Product = () => {
     }
   };
 
-  // ⏳ Loading
+  // Loading
   if (!product) {
     return <div className="p-5">Loading...</div>;
   }

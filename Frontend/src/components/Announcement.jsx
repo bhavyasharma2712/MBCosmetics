@@ -1,18 +1,26 @@
-import {Typewriter} from "react-simple-typewriter";
+import { Typewriter } from "react-simple-typewriter";
 
 const Announcement = () => {
-    return (
-        <div style={{ backgroundColor: '#90EE90', textAlign: 'center' }} classname ="flex text-white text-[18px] font-semibold h-[30px] ">
-            <Typewriter
-            words = {["🌿 Free Shipping on orders above ₹499", "Use Code MBFRESH for 10% off" , "New Arrivals: Men's Face Wash Collection", "100% Natural Ingredients"]}
-            loop = {5}
-            cursor
-            cursorStyle = '_'
-            typeSpeed = {70}
-            deleteSpeed={50}
-            delaySpeed={1000}
-            />
-        </div>
-    )
-}
-export default Announcement
+  return (
+    <div className="bg-green-600 flex items-center justify-center h-[34px]">
+      <p className="text-white text-[11.5px] font-medium tracking-widest uppercase">
+        <Typewriter
+          words={[
+            "Use Code SAVE20 for 20% off",
+            "New Arrivals: Men's Collection",
+            "100% Natural Ingredients",
+            "New Arrivals: Rexona FaceWash"
+          ]}
+          loop={0}
+          cursor
+          cursorStyle="|"
+          typeSpeed={65}
+          deleteSpeed={40}
+          delaySpeed={1800}
+        />
+      </p>
+    </div>
+  );
+};
+
+export default Announcement;
