@@ -1,79 +1,92 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 
-const BASE_URL = "https://mbcosmetics.onrender.com";
 const INTERVAL_MS = 5000;
+const BASE_URL = "http://localhost:8000";
 
-const Banner = ({ onShopNowClick }) => {
-  const [banners, setBanners] = useState([]);
+const FALLBACK_BANNER = {
+  img: "/bannerweb.png",
+  title: "Reveal Your Natural Radiance",
+  subtitle: "with our premium beauty collection",
+};
+
+const Banner = ({ onShopNowClick, localBanners = [] }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [visible, setVisible] = useState(true);
-  const [loading, setLoading] = useState(true);
   const timerRef = useRef(null);
 
-  useEffect(() => {
-    const fetchBanners = async () => {
-      try {
-        const res = await fetch(`${BASE_URL}/api/v1/banners`);
-        const data = await res.json();
-        setBanners(data);
-      } catch (err) {
-        console.error("Failed to fetch banners:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchBanners();
-  }, []);
-
-  useEffect(() => {
-    if (banners.length <= 1) return;
-
-    timerRef.current = setInterval(() => {
-      setVisible(false);
-      setTimeout(() => {
-        setCurrentIndex((prev) => (prev + 1) % banners.length);
-        setVisible(true);
-      }, 600);
-    }, INTERVAL_MS);
-
-    return () => clearInterval(timerRef.current);
-  }, [banners]);
-
-  const banner = banners[currentIndex];
+  const activeBanners = localBanners && localBanners.length > 0 
+    ? localBanners 
+    : [FALLBACK_BANNER];
 
   const getBannerImage = (img) => {
     if (!img) return "/bannerweb.png";
-    if (img.startsWith("http")) return img;
-    if (img.startsWith("/uploads/")) return `${BASE_URL}${img}`;
+    if (img instanceof File) return URL.createObjectURL(img);
+    if (typeof img === 'string' && img.startsWith("/uploads/")) {
+      return `${BASE_URL}${img}`;
+    }
     return img;
   };
 
-  const bgImage = getBannerImage(banner?.img);
-  const title = banner?.title || "Reveal Your Natural Radiance";
-  const subtitle = banner?.subtitle || "with our premium beauty collection";
+  const nextSlide = useCallback(() => {
+    if (activeBanners.length <= 1) return;
+    
+    setVisible(false);
+    setTimeout(() => {
+      setCurrentIndex((prev) => (prev + 1) % activeBanners.length);
+      setVisible(true);
+    }, 600);
+  }, [activeBanners.length]);
 
-  if (loading) {
-    return (
-      <div className="bg-gray-900 h-[75vh] flex items-center justify-center">
-        <div className="w-8 h-8 border-4 border-green-400 border-t-transparent rounded-full animate-spin" />
-      </div>
-    );
-  }
+  const handleManualClick = (index) => {
+    if (index === currentIndex || activeBanners.length <= 1) return;
+    
+    if (timerRef.current) clearInterval(timerRef.current);
+    
+    setVisible(false);
+    setTimeout(() => {
+      setCurrentIndex(index);
+      setVisible(true);
+      timerRef.current = setInterval(nextSlide, INTERVAL_MS);
+    }, 600);
+  };
+
+  useEffect(() => {
+    if (activeBanners.length > 1) {
+      timerRef.current = setInterval(nextSlide, INTERVAL_MS);
+    }
+
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+  }, [nextSlide, activeBanners.length]); 
+
+  const banner = activeBanners[currentIndex] || FALLBACK_BANNER;
+  const bgImage = getBannerImage(banner?.img);
+  const title = banner?.title || FALLBACK_BANNER.title;
+  const subtitle = banner?.subtitle || FALLBACK_BANNER.subtitle;
 
   return (
-    <div
-      className="bg-no-repeat bg-cover h-[75vh] relative"
-      style={{ backgroundImage: `url('${bgImage}')` }}
-    >
-      {/* Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent" />
-
-      {/* Fading content */}
+    <div className="relative h-[75vh] w-full overflow-hidden bg-[#1a1a1a]">
+      {/* Background Image Layer */}
       <div
-        style={{ opacity: visible ? 1 : 0, transition: "opacity 0.6s ease-in-out" }}
-        className="relative h-full flex flex-col justify-center px-24 max-w-3xl"
+        className="absolute inset-0 bg-no-repeat bg-cover bg-center transition-all duration-1000 ease-in-out"
+        style={{ 
+          backgroundImage: `url('${bgImage}')`,
+          opacity: visible ? 1 : 0,
+          transform: visible ? 'scale(1)' : 'scale(1.05)'
+        }}
       >
-        {/* Badge */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent" />
+      </div>
+
+      {/* Content Layer */}
+      <div
+        className="relative h-full flex flex-col justify-center px-6 md:px-24 max-w-4xl transition-all duration-700 ease-in-out"
+        style={{ 
+            opacity: visible ? 1 : 0,
+            transform: visible ? 'translateY(0)' : 'translateY(10px)'
+        }}
+      >
         <div className="flex items-center gap-2 mb-5">
           <div className="h-px w-10 bg-green-400" />
           <span className="text-green-400 text-xs font-semibold tracking-[0.3em] uppercase">
@@ -81,8 +94,7 @@ const Banner = ({ onShopNowClick }) => {
           </span>
         </div>
 
-        {/* Heading */}
-        <h1 className="text-5xl font-bold text-white leading-tight tracking-tight mb-4">
+        <h1 className="text-4xl md:text-6xl font-bold text-white leading-tight tracking-tight mb-4">
           {title.includes(" ") ? (
             <>
               {title.split(" ").slice(0, Math.ceil(title.split(" ").length / 2)).join(" ")} <br />
@@ -95,46 +107,30 @@ const Banner = ({ onShopNowClick }) => {
           )}
         </h1>
 
-        {/* Subtext */}
-        <p className="text-white/75 text-lg font-light mb-2 leading-relaxed">{subtitle}</p>
+        <p className="text-white/80 text-lg md:text-xl font-light mb-2 max-w-xl leading-relaxed">
+          {subtitle}
+        </p>
 
-        {/* Tagline */}
         <p className="text-white/90 text-xl font-semibold italic mb-8">✨ Glow With Confidence</p>
 
-        {/* Buttons */}
         <div className="flex items-center gap-4">
           <button
             onClick={onShopNowClick}
-            className="bg-green-600 hover:bg-green-500 text-white font-semibold px-8 py-3 rounded-full transition-all duration-200 hover:shadow-lg hover:shadow-green-900/40 hover:-translate-y-0.5"
+            className="bg-green-600 hover:bg-green-500 text-white font-semibold px-10 py-3.5 rounded-full transition-all duration-300 active:scale-95"
           >
             Shop Now
           </button>
-          <button className="bg-transparent border-2 border-white/60 hover:border-white text-white font-semibold px-8 py-3 rounded-full transition-all duration-200 hover:-translate-y-0.5 backdrop-blur-sm">
-            Contact Us
-          </button>
         </div>
 
-        {/* Dots */}
-        {banners.length > 1 && (
-          <div className="flex items-center gap-2 mt-8">
-            {banners.map((_, i) => (
+        {activeBanners.length > 1 && (
+          <div className="flex items-center gap-3 mt-12">
+            {activeBanners.map((_, i) => (
               <button
                 key={i}
-                onClick={() => {
-                  clearInterval(timerRef.current);
-                  setVisible(false);
-                  setTimeout(() => { setCurrentIndex(i); setVisible(true); }, 600);
-                }}
-                style={{
-                  width: i === currentIndex ? "24px" : "8px",
-                  height: "8px",
-                  borderRadius: "999px",
-                  background: i === currentIndex ? "#4ade80" : "rgba(255,255,255,0.4)",
-                  border: "none",
-                  cursor: "pointer",
-                  transition: "all 0.3s ease",
-                  padding: 0,
-                }}
+                onClick={() => handleManualClick(i)}
+                className={`h-2 rounded-full transition-all duration-500 ${
+                  i === currentIndex ? "w-8 bg-green-400" : "w-2 bg-white/30 hover:bg-white/50"
+                }`}
               />
             ))}
           </div>

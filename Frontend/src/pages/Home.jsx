@@ -1,18 +1,28 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import Banner from "../components/Banner";
 import Category from "../components/Category";
 import Products from "../components/Products";
 
+const BASE_URL = "http://localhost:8000";
+
 const BEST_SELLERS = [
-  "Dr Rashel's Salicylic Acid 2% Face Serum",
+  "Kylie Mascara: Infinite Volume",
+  "Kylie Velvet Lip Liner – Smooth Matte Precision for Perfectly Defined Lips",
+  "Luron Eyeliner",
+  "Nivea FaceWash for Men",
   "Rexona Face Wash for Women",
-  "AquaClear Hydrating Toner for Men",
-  "Dr Rashel Sunscreen SPF 50",
-  "Luminous Hydration Boost Day & Night Moisturizer",
 ];
 
 const Home = () => {
   const productsRef = useRef(null);
+  const [banners, setBanners] = useState([]);
+
+  useEffect(() => {
+    fetch(`${BASE_URL}/api/v1/banners`)
+      .then((res) => res.json())
+      .then((data) => setBanners(data))
+      .catch(() => setBanners([]));
+  }, []);
 
   const scrollToProducts = () => {
     productsRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -20,7 +30,7 @@ const Home = () => {
 
   return (
     <div>
-      <Banner onShopNowClick={scrollToProducts} />
+      <Banner onShopNowClick={scrollToProducts} localBanners={banners} />
       <Category />
       <div ref={productsRef} className="scroll-mt-24">
         <div className="flex flex-col items-center py-10">

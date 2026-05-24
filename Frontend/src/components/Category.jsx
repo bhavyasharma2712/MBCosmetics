@@ -36,8 +36,8 @@ const Category = () => {
           <div className="absolute inset-0 bg-[url('/mencategory.png')] bg-cover bg-center transition duration-500 group-hover:scale-110"></div>
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent group-hover:from-black/60 transition"></div>
           <div className="absolute bottom-8 left-0 right-0 flex flex-col items-center">
-            <h2 className="text-[28px] font-bold text-white tracking-widest transition duration-300 group-hover:scale-105">
-              MEN
+            <h2 className="text-[24px] font-bold text-white tracking-widest transition duration-300 group-hover:scale-105">
+              MEN SKINCARE
             </h2>
             <div className="mt-2 h-0.5 w-8 bg-green-400 rounded-full group-hover:w-16 transition-all duration-300" />
           </div>
@@ -48,8 +48,8 @@ const Category = () => {
           <div className="absolute inset-0 bg-[url('/femalecategory.png')] bg-cover bg-center transition duration-500 group-hover:scale-110"></div>
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent group-hover:from-black/60 transition"></div>
           <div className="absolute bottom-8 left-0 right-0 flex flex-col items-center">
-            <h2 className="text-[28px] font-bold text-white tracking-widest transition duration-300 group-hover:scale-105">
-              WOMEN
+            <h2 className="text-[24px] font-bold text-white tracking-widest transition duration-300 group-hover:scale-105">
+              WOMEN SKINCARE
             </h2>
             <div className="mt-2 h-0.5 w-8 bg-green-400 rounded-full group-hover:w-16 transition-all duration-300" />
           </div>

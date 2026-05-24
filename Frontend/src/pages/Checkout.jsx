@@ -16,8 +16,9 @@ const Checkout = () => {
   const [form, setForm] = useState({
     name: currentUser?.name || "",
     email: currentUser?.email || "",
-    phone: "",
-    address: "",
+    // database se saved phone aur address pehle se fill ho jaayega
+    phone: currentUser?.phone || "",
+    address: currentUser?.address || "",
   });
 
   const [loading, setLoading] = useState(false);
@@ -46,19 +47,22 @@ const Checkout = () => {
 
     const scriptLoaded = await loadRazorpayScript();
     if (!scriptLoaded) {
-      toast.error("Failed to load Razorpay. Check your internet connection.");
+      toast.error("Failed to load Razorpay. Please check your connection.");
       setLoading(false);
       return;
     }
 
     try {
-      // 1. Create Razorpay order on backend
-      const { data: razorpayOrder } = await userRequest.post(
-        "/payment/create-order",
-        { amount: grandTotal }
-      );
+      const res = await userRequest.post("/payment/create-order", {
+        amount: grandTotal,
+      });
 
-      // 2. Open Razorpay checkout
+      const razorpayOrder = res.data.order ? res.data.order : res.data;
+
+      if (!razorpayOrder || !razorpayOrder.id) {
+        throw new Error("Invalid order response from server");
+      }
+
       const options = {
         key: import.meta.env.VITE_RAZORPAY_KEY_ID,
         amount: razorpayOrder.amount,
@@ -68,7 +72,6 @@ const Checkout = () => {
         order_id: razorpayOrder.id,
         handler: async function (response) {
           try {
-            // 3. Verify payment on backend
             const { data: verification } = await userRequest.post(
               "/payment/verify",
               {
@@ -79,7 +82,6 @@ const Checkout = () => {
             );
 
             if (verification.success) {
-              // 4. Save order to DB
               await userRequest.post("/orders", {
                 name: form.name,
                 userId: currentUser?._id || "guest",
@@ -94,7 +96,7 @@ const Checkout = () => {
                 phone: form.phone,
                 email: form.email,
                 status: 1,
-                paymentId: verification.paymentId,
+                paymentId: response.razorpay_payment_id,
               });
 
               dispatch(clearCart());
@@ -102,7 +104,9 @@ const Checkout = () => {
               navigate("/myorders");
             }
           } catch (err) {
-            toast.error("Payment verification failed. Contact support.");
+            toast.error("Payment verification failed. Please contact support.");
+          } finally {
+            setLoading(false);
           }
         },
         prefill: {
@@ -123,9 +127,10 @@ const Checkout = () => {
 
       const rzp = new window.Razorpay(options);
       rzp.open();
-      setLoading(false);
     } catch (err) {
-      toast.error("Something went wrong. Please try again.");
+      console.error("Checkout Error:", err);
+      const errorMsg = err.response?.data?.message || "Something went wrong. Please try again.";
+      toast.error(errorMsg);
       setLoading(false);
     }
   };
@@ -149,15 +154,11 @@ const Checkout = () => {
       <h3 className="text-[20px] font-bold mb-6">Checkout</h3>
 
       <div className="flex gap-8 flex-col md:flex-row">
-        {/* Delivery Details */}
         <div className="flex-1 bg-white shadow-md rounded-lg p-6">
           <h2 className="text-xl font-semibold mb-4">Delivery Details</h2>
-
           <div className="flex flex-col gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Full Name
-              </label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
               <input
                 type="text"
                 name="name"
@@ -167,11 +168,8 @@ const Checkout = () => {
                 className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-[#1b5e15]"
               />
             </div>
-
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Email
-              </label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
               <input
                 type="email"
                 name="email"
@@ -181,11 +179,8 @@ const Checkout = () => {
                 className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-[#1b5e15]"
               />
             </div>
-
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Phone Number
-              </label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
               <input
                 type="tel"
                 name="phone"
@@ -195,11 +190,8 @@ const Checkout = () => {
                 className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-[#1b5e15]"
               />
             </div>
-
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Delivery Address
-              </label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Delivery Address</label>
               <textarea
                 name="address"
                 value={form.address}
@@ -212,21 +204,16 @@ const Checkout = () => {
           </div>
         </div>
 
-        {/* Order Summary */}
         <div className="w-full md:w-80 bg-white shadow-md rounded-lg p-6 h-fit">
           <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
-
           <div className="flex flex-col space-y-3 mb-4">
             {products.map((p) => (
               <div key={p.id} className="flex justify-between text-sm">
-                <span className="text-gray-600">
-                  {p.name} x {p.quantity}
-                </span>
+                <span className="text-gray-600">{p.name} x {p.quantity}</span>
                 <span>₹{p.price * p.quantity}</span>
               </div>
             ))}
           </div>
-
           <div className="border-t pt-4 flex flex-col space-y-3">
             <div className="flex justify-between">
               <span className="text-gray-600">Subtotal</span>
@@ -241,7 +228,6 @@ const Checkout = () => {
               <span>₹{grandTotal}</span>
             </div>
           </div>
-
           <button
             onClick={handlePayment}
             disabled={loading}
@@ -249,10 +235,7 @@ const Checkout = () => {
           >
             {loading ? "Processing..." : `Pay ₹${grandTotal}`}
           </button>
-
-          <p className="text-xs text-gray-400 text-center mt-3">
-            Secured by Razorpay
-          </p>
+          <p className="text-xs text-gray-400 text-center mt-3">Secured by Razorpay</p>
         </div>
       </div>
     </div>
