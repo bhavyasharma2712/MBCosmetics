@@ -1,7 +1,7 @@
 import { FaPlus, FaTrash, FaCloudUploadAlt } from "react-icons/fa";
 import { useState, useEffect, useRef } from "react";
 
-const BASE_URL = "http://localhost:8000";
+const BASE_URL = import.meta.env.VITE_API_URL?.replace("/api/v1", "") || "http://localhost:8000";
 
 const Banners = () => {
   const [banners, setBanners] = useState([]);
@@ -130,7 +130,7 @@ const Banners = () => {
             banners.map((banner) => (
               <div key={banner._id} style={bannerCardStyle}>
                 <img
-                  src={`${BASE_URL}${banner.img}`}
+                  src={banner.img}
                   alt={banner.title}
                   style={bannerImageStyle}
                   onError={(e) => { e.target.src = "/placeholder.png"; }}
