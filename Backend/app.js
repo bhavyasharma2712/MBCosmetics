@@ -18,7 +18,12 @@ const app = express();
 
 //cors
 app.use(cors({
-  origin: ["http://localhost:3000", "http://localhost:5173", "https://mbcosmetics-git-integration-bhavyasharma2712s-projects.vercel.app"],
+  origin: [
+    "http://localhost:3000",
+    "http://localhost:5173",
+    "https://mbcosmetics-git-integration-bhavyasharma2712s-projects.vercel.app",
+    "https://mb-cosmetics-git-master-mbcosmetics2712-1618s-projects.vercel.app", // ✅ added
+  ],
   credentials: true,
 }));
 
