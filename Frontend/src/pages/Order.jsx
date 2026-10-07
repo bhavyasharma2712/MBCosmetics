@@ -1,9 +1,10 @@
+// Frontend/src/pages/Order.jsx
 import { FaCheckCircle, FaStar } from "react-icons/fa";
 import { FaTruck, FaHouse, FaBoxOpen } from "react-icons/fa6";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { userRequest } from "../requestMethods.js";
+import { userRequest, BASE_URL } from "../requestMethods.js";
 
 const statusSteps = [
   { label: "Confirmed", icon: <FaCheckCircle />, value: 0 },
@@ -81,6 +82,12 @@ const Order = () => {
   const formatDate = (dateStr) => {
     const d = new Date(dateStr);
     return d.toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" });
+  };
+
+  const getItemImage = (item) => {
+    if (item.img?.[0]) return `${BASE_URL}/uploads/${item.img[0]}`;
+    if (item.image) return `${BASE_URL}/uploads/${item.image}`;
+    return "/placeholder.jpg";
   };
 
   // ── Loading ──────────────────────────────────────────────────────────────
@@ -266,7 +273,7 @@ const Order = () => {
                           <div className="flex items-center gap-3 py-2">
                             <div className="relative">
                               <img
-                                src={item.img?.[0] ? `http://localhost:8000/uploads/${item.img[0]}` : item.image ? `http://localhost:8000/uploads/${item.image}` : "/placeholder.jpg"}
+                                src={getItemImage(item)}
                                 alt={item.title || item.name}
                                 className="w-14 h-14 object-cover rounded-lg border border-gray-200"
                               />

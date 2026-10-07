@@ -1,7 +1,7 @@
+// Admin/src/pages/Banners.jsx
 import { FaPlus, FaTrash, FaCloudUploadAlt } from "react-icons/fa";
 import { useState, useEffect, useRef } from "react";
-
-const BASE_URL = "http://localhost:8000";
+import { BASE_URL } from "../requestMethods";
 
 const Banners = () => {
   const [banners, setBanners] = useState([]);
@@ -25,7 +25,7 @@ const Banners = () => {
     try {
       const res = await fetch(`${BASE_URL}/api/v1/banners`);
       const data = await res.json();
-      setBanners(data);
+      setBanners(Array.isArray(data) ? data : []);
     } catch (err) {
       setError("Failed to fetch banners");
     } finally {

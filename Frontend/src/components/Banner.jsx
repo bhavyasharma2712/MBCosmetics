@@ -1,7 +1,8 @@
+// Frontend/src/components/Banner.jsx
 import { useEffect, useState, useRef, useCallback } from "react";
+import { BASE_URL } from "../requestMethods";
 
 const INTERVAL_MS = 5000;
-const BASE_URL = "http://localhost:8000";
 
 const FALLBACK_BANNER = {
   img: "/bannerweb.png",

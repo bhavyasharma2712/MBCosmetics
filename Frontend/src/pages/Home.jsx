@@ -1,9 +1,9 @@
+// Frontend/src/pages/Home.jsx
 import React, { useRef, useEffect, useState } from "react";
 import Banner from "../components/Banner";
 import Category from "../components/Category";
 import Products from "../components/Products";
-
-const BASE_URL = "http://localhost:8000";
+import { BASE_URL } from "../requestMethods";
 
 const BEST_SELLERS = [
   "Kylie Mascara: Infinite Volume",
@@ -20,7 +20,7 @@ const Home = () => {
   useEffect(() => {
     fetch(`${BASE_URL}/api/v1/banners`)
       .then((res) => res.json())
-      .then((data) => setBanners(data))
+      .then((data) => setBanners(Array.isArray(data) ? data : []))
       .catch(() => setBanners([]));
   }, []);
 

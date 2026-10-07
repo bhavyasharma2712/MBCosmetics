@@ -1,9 +1,10 @@
+// Frontend/src/pages/Product.jsx
 import { useParams } from "react-router-dom";
 import StarRatings from "react-star-ratings";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addProduct } from "../redux/cartRedux";
-import { userRequest } from "../requestMethods";
+import { userRequest, BASE_URL } from "../requestMethods";
 
 const hardcodedReviews = {
   "Rexona Face Wash for Women": [
@@ -157,7 +158,7 @@ const getImageUrl = (img) => {
   const raw = Array.isArray(img) ? img[0] : img;
   if (!raw) return "/placeholder.png";
   if (raw.startsWith("http")) return raw;
-  if (raw.startsWith("/uploads/")) return `http://localhost:8000${raw}`;
+  if (raw.startsWith("/uploads/")) return `${BASE_URL}${raw}`;
   return raw;
 };
 
